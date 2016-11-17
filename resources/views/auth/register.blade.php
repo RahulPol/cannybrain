@@ -59,15 +59,19 @@
 			<div class="register-box-body">
 				<p class="login-box-msg">Register a new membership</p>
 				@if (count($errors) > 0)
-						<div class="alert alert-danger">
-							<strong>Whoops!</strong> There were some problems with your input.<br><br>
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
+				<div class="form-group has-error">						
+					<strong>Whoops!</strong> There were problems with input.<br>					
+						@foreach ($errors->all() as $error)
+							<label class="control-lebel">
+								<i class="fa fa-times-circle-o"></i>{{ $error }}
+							</label>
+						@endforeach
+				</div>					
+				@endif
+
+					<!--@if (count($errors) > 0)
+							{{ implode('', $errors->all('<div>:message</div>')) }}
+					@endif-->
 
 				<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/register') }}" data-parsley-validate="" >
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
