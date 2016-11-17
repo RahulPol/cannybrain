@@ -96,5 +96,5 @@ elixir(function(mix) {
         
 
 
-    //mix.phpUnit([] , path.normalize('vendor/bin/phpunit') + ' --verbose');
+    mix.phpUnit([] , path.normalize('vendor/bin/phpunit') + ' --verbose');
 });
