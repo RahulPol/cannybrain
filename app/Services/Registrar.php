@@ -19,7 +19,8 @@ class Registrar implements RegistrarContract {
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|confirmed|min:6',
 			'dob'=> 'required|date',
-			'mobile_number' => 'required|digits_between:10,11'
+			'mobile_number' => 'required|digits_between:10,11',
+			'g-recaptcha-response' => 'required|captcha'
 		]);
 	}
 
@@ -37,7 +38,7 @@ class Registrar implements RegistrarContract {
 			'password' => bcrypt($data['password']),
 			'company_id'=> '1',//get company_id from company name
 			'group_name' => isset($data['group_name']) ? $data['group_name'] : null,
-			'dob' => $data['dob'],
+			'dob' => isset($data['dob']) ? $data['dob'] : null,
 			'mobile_number' => $data['mobile_number']
 		]);
 	}

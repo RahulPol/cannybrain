@@ -137,6 +137,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 
 		'Collective\Html\HtmlServiceProvider',
+		'Anhskohbo\NoCaptcha\NoCaptchaServiceProvider',
 
 		/*
 		 * Application Service Providers...

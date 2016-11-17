@@ -14,17 +14,46 @@
     
     {!! Html::style(elixir('css/app.css')) !!}
 
+	{!! Html::style(elixir('css/utility.css')) !!}
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+
+  <!--Write Custom Styles Here-->
+  <style>	
+  	  /*background image for register page*/
+	  .register-page {
+			background-image: url("/build/img/background/cannybrain-background-3.jpg");
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: cover;			
+		}
+
+		/*Override default margin to register box of Admin LTE*/
+		.register-box{
+			margin:3% auto;
+		}
+
+		.register-logo a{
+			color:#fff;
+		}
+
+		.register-box-body{
+			opacity:0.8;
+		}
+
+		/*End of Override*/
+  </style>
+
 </head>
 <body class="hold-transition register-page">						
 		<div class="register-box">
 			<div class="register-logo">
-				<a href="../../index2.html"><b>Canny</b>Brain</a>
+				<a href="/"><b>Canny</b>Brain</a>
 			</div>
 
 			<div class="register-box-body">
@@ -40,24 +69,43 @@
 						</div>
 					@endif
 
-				<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/register') }}" onsubmit="return validateNewUser();" >
+				<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/register') }}" data-parsley-validate="" >
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="form-group has-feedback">
-						<input type="text" class="form-control" placeholder="Full name" name="name" value="{{ old('name') }}">
+						<input type="text" class="form-control" placeholder="Full name" name="name" value="{{ old('name') }}" required maxlength="255">
 						<span class="glyphicon glyphicon-user form-control-feedback"></span>
 					</div>
 					<div class="form-group has-feedback">
-						<input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}">
+						<input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required>
 						<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 					</div>
+
 					<div class="form-group has-feedback">
-						<input type="password" class="form-control" placeholder="Password" name="password">
+						<input class="form-control" placeholder="Mobile No." name="mobile_number"  value="{{ old('mobile_number') }}" required data-parsley-pattern="/^(\+\d{1,3}[- ]?)?\d{10}$/">
+						<span class="fa fa-mobile fa-2x form-control-feedback"></span>
+					</div>
+
+					<div class="form-group has-feedback">
+						<input id="userPassword" type="password" class="form-control" placeholder="Password" name="password" required>
 						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					</div>
 					<div class="form-group has-feedback">
-						<input type="password" class="form-control" placeholder="Retype password" name="password_confirmation">
+						<input type="password" class="form-control" placeholder="Retype password" name="password_confirmation" data-parsley-equalto="#userPassword">
 						<span class="glyphicon glyphicon-log-in form-control-feedback"></span>
 					</div>
+
+					<div class="form-group has-feedback">
+						<div class="col-md-6 ">
+							{!! app('captcha')->display() !!}
+
+							@if($errors->has('g-recaptcha-response'))
+								<span class="help-block">
+									<strong>{{$errors->first('g-recaptcha-response') }}</strong>
+								</span>
+							@endif
+						</div>
+					</div>
+
 					<div class="row">
 						<div class="col-xs-8">
 						<!--<div class="checkbox icheck">
@@ -68,7 +116,7 @@
 						</div>
 						<!-- /.col -->
 						<div class="col-xs-4">
-						<button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+						<button type="submit" class="btn btn-success btn-block btn-flat">Register</button>
 						</div>
 						<!-- /.col -->
 					</div>
@@ -90,6 +138,7 @@
 		</div>					
 	<!-- REQUIRED JS SCRIPTS -->
 	{!! Html::script(elixir('js/app.js')) !!}
+	{!! Html::script(elixir('js/utility.js')) !!}
 </body>
 </html>
 
