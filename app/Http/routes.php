@@ -12,9 +12,9 @@
 */
 
 
-Route::get('/', function(){
-	return view('layout.master');
-});
+// Route::get('/', function(){
+// 	return view('layout.master');
+// });
 
 
 Route::get('home', 'HomeController@index');
