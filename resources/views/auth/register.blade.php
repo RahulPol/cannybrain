@@ -60,7 +60,7 @@
 				<p class="login-box-msg">Register a new membership</p>
 				@if (count($errors) > 0)
 						<div class="alert alert-danger">
-							<strong>Whoops!</strong> There were some problems with your input.<br><br>
+							<!--<strong>Whoops!</strong> There were some problems with your input.<br><br>-->
 							<ul>
 								@foreach ($errors->all() as $error)
 									<li>{{ $error }}</li>
@@ -86,7 +86,7 @@
 					</div>
 
 					<div class="form-group has-feedback">
-						<input id="userPassword" type="password" class="form-control" placeholder="Password" name="password" required>
+						<input id="userPassword" type="password" class="form-control" placeholder="Password" name="password" required minlength=6>
 						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					</div>
 					<div class="form-group has-feedback">
