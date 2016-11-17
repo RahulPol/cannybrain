@@ -18,7 +18,7 @@ elixir(function(mix) {
 
         .copy(
             'node_modules/admin-lte/bootstrap/fonts',
-            'public/build/fonts/bootstrap'
+            'public/build/fonts'
         )
 
         .copy(
