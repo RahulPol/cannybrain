@@ -1,61 +1,109 @@
-@extends('app')
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 2 | Log in</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons -->
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />    
+    
+    {!! Html::style(elixir('css/app.css')) !!}
 
-@section('content')
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-heading">Login</div>
-				<div class="panel-body">
-					@if (count($errors) > 0)
-						<div class="alert alert-danger">
-							<strong>Whoops!</strong> There were some problems with your input.<br><br>
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
+	  {!! Html::style(elixir('css/utility.css')) !!}
 
-					<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/login') }}">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-						<div class="form-group">
-							<label class="col-md-4 control-label">E-Mail Address</label>
-							<div class="col-md-6">
-								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
-							</div>
-						</div>
+  <!--Write Custom Styles Here-->
+  <style>	
+  	  /*background image for login page*/
+	  .login-page {
+			background-image: url("/build/img/background/cannybrain-background-3.jpg");
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: cover;			
+		}
 
-						<div class="form-group">
-							<label class="col-md-4 control-label">Password</label>
-							<div class="col-md-6">
-								<input type="password" class="form-control" name="password">
-							</div>
-						</div>
+		/*Override default margin to login box of Admin LTE*/
+		.login-box{
+			margin:3% auto;
+		}
 
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" name="remember"> Remember Me
-									</label>
-								</div>
-							</div>
-						</div>
+		.login-logo a{
+			color:#fff;
+		}
 
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">Login</button>
+		.login-box-body{
+			opacity:0.8;
+		}
 
-								<a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+		/*End of Override*/
+  </style>
+
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="/"><b>CannyBrain</b> Admin</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in as CannyBrain Admin</p>
+    @if (count($errors) > 0)
+    <div class="form-group has-error">						      					       
+          <label class="control-lebel">
+            Incorrect Email Address or Password. Try Again..
+          </label>       
+    </div>					
+    @endif
+
+    <form action="{{ url('/auth/login') }}" method="post" data-parsley-validate="">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+      <div class="form-group has-feedback">
+        <input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required> 
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" placeholder="Password" name="password" required minlength=6>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="remember"> Remember Me
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-success btn-block btn-flat">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+    <br>
+    
+
+    <a href="{{ url('/password/email') }}">I forgot my password</a><br>
+    <a href="/auth/register" class="text-center">Register a new membership</a>
+
+  </div>
+  <!-- /.login-box-body -->
 </div>
-@endsection
+<!-- /.login-box -->
+
+<!-- REQUIRED JS SCRIPTS -->
+{!! Html::script(elixir('js/app.js')) !!}
+{!! Html::script(elixir('js/utility.js')) !!}
+
+</body>
+</html>
