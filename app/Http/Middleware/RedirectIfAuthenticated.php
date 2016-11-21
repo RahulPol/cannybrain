@@ -32,10 +32,18 @@ class RedirectIfAuthenticated {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next)
-	{
+	{		
 		if ($this->auth->check())
 		{
-			return new RedirectResponse(url('/home'));
+			if($this->auth->user()->role->name=='admin')
+			{
+				return $next($request);
+			}
+
+			else if($this->auth->user()->role->name=='user')
+			{
+				return redirect()->guest('/u');				
+			}
 		}
 
 		return $next($request);
