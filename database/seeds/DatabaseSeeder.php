@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use App\Role;
 
 class DatabaseSeeder extends Seeder {
 
@@ -12,9 +13,23 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
 	{
-		Model::unguard();
+		$this->call('RoleTableSeeder');
+		$this->command->info('Role table seeded!');
 
-		// $this->call('UserTableSeeder');
+		//Model::unguard();
 	}
+
+}
+
+
+class RoleTableSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('roles')->delete();
+
+        Role::create(['name' => 'admin']);
+		Role::create(['name' => 'user']);
+    }
 
 }
