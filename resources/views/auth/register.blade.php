@@ -25,8 +25,36 @@
 	.register-box-body{
 		opacity:0.8;
 	}
-
+	
 	/*End of Override*/
+
+	/* Remove icon for dropdown*/
+	.roleSelect {
+		position: relative;
+		display: block;		
+	}
+
+	select{
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+	.roleSelect:after {
+		content:"\f2bb";
+		font-family: FontAwesome;
+		color: #000;
+		padding: 12px 8px;
+		position: absolute; right: 15px; top: -4px;		
+		z-index: 1;
+		text-align: center;
+		width: 10%;
+		height: 100%;      
+		pointer-events: none;
+		box-sizing: border-box;
+		font-weight: lighter !important;  		
+	}
+
+	
 </style>
 @endsection
 
@@ -71,6 +99,17 @@
 				<input class="form-control" placeholder="Mobile No." name="mobile_number"  value="{{ old('mobile_number') }}" required data-parsley-pattern="/^(\+\d{1,3}[- ]?)?\d{10}$/">
 				<span class="fa fa-mobile fa-2x form-control-feedback"></span>
 			</div>
+
+			<div class="form-group">
+				<label class="roleSelect">
+					<select class="form-control" style="width: 100%;font-family:FontAwesome,Arial;font-weight: lighter;" name="role" required data-parsley-group='["user", "admin"]'>
+						<!-- icon for choose a role &#xf2bb;-->
+						<option value='' default>Choose a Role </option>
+						<option value='user'>User</option>
+						<option value='admin'>Admin</option>					
+					</select>
+				</label>								
+			</div>			
 
 			<div class="form-group has-feedback">
 				<input id="userPassword" type="password" class="form-control" placeholder="Password" name="password" required minlength=6>
@@ -124,3 +163,9 @@
 	<!-- /.register-box -->
 </div>					
 @endsection	
+
+@section('customScript')
+<script>
+	//nnnynn$('.select2').select2();
+</script>
+@endsection
