@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "admin-lte": "^2.3.8",
+    "font-awesome": "^4.7.0",
+    "ionicons": "^3.0.0",
     "jquery": "^2.1.4",
     "parsleyjs": "^2.6.0"
   }
