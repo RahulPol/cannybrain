@@ -54,6 +54,12 @@
   	<div class="col-xs-6 col-offset-xs-5">	
 	  <div class="box box-default">
 	  	<div class="box-body">
+			
+			@if (session('status'))
+						<div class="alert alert-success">
+							{{ session('status') }}
+						</div>
+			@endif
 
 			@if (count($errors) > 0)
 			<div class="form-group has-error">						      					       
