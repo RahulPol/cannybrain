@@ -17,7 +17,20 @@
 // });
 
 
-Route::get('home', 'HomeController@index');
+//Route::get('home', 'HomeController@index');
+
+Route::group(['middleware'=>['auth','auth.admin']],function(){
+	Route::get('a/dashboard',[ 'uses'=>'AdminDashboardController@index']);
+	Route::get('a/testsetup',[ 'uses'=>'TestSetupController@index']);
+
+});
+
+Route::group(['middleware'=>['auth']],function(){
+	Route::get('u', function(){
+		return 'user logged in';
+	});
+});
+
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
