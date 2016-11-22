@@ -21,8 +21,8 @@
 
 Route::group(['middleware'=>['auth','auth.admin']],function(){
 	Route::get('a/dashboard',[ 'uses'=>'AdminDashboardController@index']);
-	Route::get('a/testsetup/categories',[ 'uses'=>'CategoriesController@index']);
-	Route::get('a/testsetup/chapters',[ 'uses'=>'ChaptersController@index']);
+	Route::get('a/configuration/categories',[ 'uses'=>'CategoriesController@index']);
+	Route::get('a/configuration/chapters',[ 'uses'=>'ChaptersController@index']);
 	// Route::get('a/testsetup/{configurationname}',[ 'uses'=>'TestSetupController@index']);
 });
 

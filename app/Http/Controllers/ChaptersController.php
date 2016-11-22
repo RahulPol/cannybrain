@@ -14,7 +14,7 @@ class ChaptersController extends Controller {
 	 */
 	public function index()
 	{
-		return view('admin.partials.testsetup.chapters');
+		return view('admin.partials.configuration.chapters');
 	}
 
 	/**
