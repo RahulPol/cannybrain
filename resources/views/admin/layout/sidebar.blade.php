@@ -45,9 +45,9 @@
             <li><a href="/u"><i class="fa fa-eye"></i><span>View Test</span></a></li>
 
             <li class="header">CONFIGURATION</li> 
-            <li><a href="/a/testsetup/Categories"><i class="fa fa-tag"></i><span>Categories</span></a></li>
-            <li><a href="/a/testsetup/Chapters"><i class="fa fa-cogs"></i><span>Chapters</span></a></li>
-            <li><a href="/a/testsetup/QuestionBank"><i class="fa fa-cogs"></i><span>Question Bank</span></a></li>
+            <li><a href="/a/testsetup/categories"><i class="fa fa-tag"></i><span>Categories</span></a></li>
+            <li><a href="/a/testsetup/chapters"><i class="fa fa-cogs"></i><span>Chapters</span></a></li>
+            <li><a href="/a/testsetup/questionBank"><i class="fa fa-cogs"></i><span>Question Bank</span></a></li>
 
             <li class="header">USER MENU </li>
             <li><a href="/u"><i class="fa fa-user"></i><span>Profile</span></a></li> 
