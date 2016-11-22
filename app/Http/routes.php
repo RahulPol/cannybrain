@@ -21,7 +21,7 @@
 
 Route::group(['middleware'=>['auth','auth.admin']],function(){
 	Route::get('a/dashboard',[ 'uses'=>'AdminDashboardController@index']);
-	Route::get('a/testsetup',[ 'uses'=>'TestSetupController@index']);
+	Route::get('a/testsetup/{configurationname}',[ 'uses'=>'TestSetupController@index']);
 
 });
 

@@ -33,20 +33,20 @@
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                    <li class="active"><a href="#categories" data-toggle="tab"><b>Categories</b></a></li>
-                    <li><a href="#chapters" data-toggle="tab"><b>Chapters</b></a></li>
-                    <li><a href="#questionbank" data-toggle="tab"><b>Question Bank</b></a></li>                            
+                    <li class= {{ $configurationname == "Categories" ? "active" : "" }}><a href="#categories" data-toggle="tab"><b>Categories</b></a></li>
+                    <li class= {{ $configurationname == "Chapters" ? "active" : "" }}><a href="#chapters" data-toggle="tab"><b>Chapters</b></a></li>
+                    <li class= {{ $configurationname == "QuestionBank" ? "active" : "" }}><a href="#questionbank" data-toggle="tab"><b>Question Bank</b></a></li>                                                
                     </ul>
                     <div class="tab-content">
-                    <div class="tab-pane active" id="categories">
+                    <div  class =  {{ $configurationname == "Categories" ? "'tab-pane active'" : "tab-pane"  }} id="categories">
                        @include('admin.partials.testsetup.categories')
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="chapters">
-                       
+                    <div class =  {{ $configurationname == "Chapters" ? "tab-pane active'" : "tab-pane" }} id="chapters">
+                        @include('admin.partials.testsetup.chapters')
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="questionbank">
+                    <div class = {{ $configurationname == "QuestionBank" ? " 'tab-pane active'" : "tab-pane" }} id="questionbank">
                        
                     </div>
                     <!-- /.tab-pane -->

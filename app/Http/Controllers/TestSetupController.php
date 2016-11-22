@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use View;
 
 class TestSetupController extends Controller {
 
@@ -12,9 +13,13 @@ class TestSetupController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index($configurationname)
 	{
-		return view('admin.partials.testsetup.layout');
+		$data['configurationname'] = $configurationname;
+		$data['tabPaneActive'] = 'tab-pane active';
+		$data['tabPaneInactive'] = 'tab-pane';
+		return view('admin.partials.testsetup.layout')->with(array('configurationname'=>$configurationname,'tabPaneActive'=>'tab-pane active','tabPaneInactive' => 'tab-pane'));
+		
 	}
 
 	/**
