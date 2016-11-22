@@ -47,7 +47,7 @@
             <li class="header">CONFIGURATION</li> 
             <li><a href="/a/configuration/categories"><i class="fa fa-tag"></i><span>Categories</span></a></li>
             <li><a href="/a/configuration/chapters"><i class="fa fa-book"></i><span>Chapters</span></a></li>
-            <li><a href="/a/configuration/questionBank"><i class="fa fa-list-ol"></i><span>Question Bank</span></a></li>
+            <li><a href="/a/configuration/questionbank"><i class="fa fa-list-ol"></i><span>Question Bank</span></a></li>
 
             <li class="header">USER MENU </li>
             <li><a href="/u"><i class="fa fa-user"></i><span>Profile</span></a></li> 

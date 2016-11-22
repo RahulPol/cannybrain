@@ -33,9 +33,9 @@
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                    <li><a href="/a/testsetup/categories"><b>Categories</b></a></li>
-                    <li  class= "active"><a href="/a/testsetup/chapters"><b>Chapters</b></a></li>
-                    <li><a href="#questionbank"><b>Question Bank</b></a></li>                                                
+                    <li><a href="/a/configuration/categories"><b>Categories</b></a></li>
+                    <li  class= "active"><a href="/a/configuration/chapters"><b>Chapters</b></a></li>
+                    <li><a href="/a/configuration/questionbank"><b>Question Bank</b></a></li>                                                
                     </ul>
                     <div class="tab-content">
                         <div  class =  "tab-pane active" id="categories">                       
