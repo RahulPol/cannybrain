@@ -1,6 +1,8 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Category\EloquentCategory;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider {
 			'Illuminate\Contracts\Auth\Registrar',
 			'App\Services\Registrar'
 		);
+
+		$this->app->singleton(CategoryRepository::class,EloquentCategory::class);
 	}
 
 }
