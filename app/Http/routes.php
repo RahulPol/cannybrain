@@ -20,11 +20,20 @@
 //Route::get('home', 'HomeController@index');
 
 Route::group(['middleware'=>['auth','auth.admin']],function(){
-	Route::get('a/dashboard',[ 'uses'=>'AdminDashboardController@index']);
-	Route::get('a/configuration/categories',[ 'uses'=>'CategoriesController@index']);
-	Route::get('a/configuration/chapters',[ 'uses'=>'ChaptersController@index']);
-	Route::get('a/configuration/questionbank',[ 'uses'=>'QuestionBankController@index']);
-	// Route::get('a/testsetup/{configurationname}',[ 'uses'=>'TestSetupController@index']);
+	#Section Dashboard
+	Route::get('a/dashboard',[ 'uses'=>'Admin\Dashboard\DashboardController@index']);	
+
+	#Section Configuration/Categories	
+	Route::get('a/configuration/categories',[ 'uses'=>'Admin\Configuration\CategoriesController@index']);
+	Route::get('a/configuration/categories/getAllCategories',[ 'uses'=>'Admin\Configuration\CategoriesController@getAllCategories']);
+	Route::post('a/configuration/categories',[ 'uses'=>'Admin\Configuration\CategoriesController@create']);
+
+	#Section Configuration/Chapters
+	Route::get('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@index']);
+
+	#Section Configuration/QuestionBank
+	Route::get('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@index']);
+	
 });
 
 Route::group(['middleware'=>['auth']],function(){
