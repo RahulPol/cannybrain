@@ -17,12 +17,14 @@
 @section('content')
     <section class="content-header">
         <h1>
-            Test Setup
+            Configuration
             <small>{{ $page_description or null }}</small>
         </h1>
         <!-- You can dynamically generate breadcrumbs here -->
         <ol class="breadcrumb">                
-            <li class="active"><a href="/a"><i class="fa fa-cogs"></i>Test Setup</a></li>                            
+            <li><a href="/a/dashboard"><i class="fa fa-home"></i>Home</a></li>
+            <li><a href="/a/configuration/categories"><i class="fa fa-cogs"></i>Configuration</a></li>
+            <li class="active"><i class="fa fa-book"></i>Chapters</li>                            
         </ol>            
     </section>
 
