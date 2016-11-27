@@ -7,7 +7,7 @@
 <style>	
 	/*background image for register page*/
 	.register-page {
-		background-image: url("/build/img/background/cannybrain-background-3.jpg");
+		background-image: url("/build/img/background/cannybrain-background-9.jpg");
 		background-repeat: no-repeat;
 		background-attachment: fixed;
 		background-size: cover;			
@@ -15,7 +15,7 @@
 
 	/*Override default margin to register box of Admin LTE*/
 	.register-box{
-		margin:3% auto;
+		margin:5% auto;
 	}
 
 	.register-logo a{
@@ -23,7 +23,7 @@
 	}
 
 	.register-box-body{
-		opacity:0.8;
+		opacity:0.9;
 	}
 	
 	/*End of Override*/

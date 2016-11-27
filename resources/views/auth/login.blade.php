@@ -6,7 +6,7 @@
 <style>	
 	/*background image for login page*/
 	.login-page {
-		background-image: url("/build/img/background/cannybrain-background-3.jpg");
+		background-image: url("/build/img/background/cannybrain-background-9.jpg");
 		background-repeat: no-repeat;
 		background-attachment: fixed;
 		background-size: cover;			
@@ -14,7 +14,7 @@
 
 	/*Override default margin to login box of Admin LTE*/
 	.login-box{
-		margin:3% auto;
+		margin:9% auto;
 	}
 
 	.login-logo a{
@@ -22,7 +22,7 @@
 	}
 
 	.login-box-body{
-		opacity:0.8;
+		opacity:0.9;
 	}
 
 	/*End of Override*/
