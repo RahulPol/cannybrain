@@ -1,11 +1,11 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class ChaptersController extends Controller {
+class DashboardController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -14,7 +14,7 @@ class ChaptersController extends Controller {
 	 */
 	public function index()
 	{
-		return view('admin.partials.configuration.chapters');
+		return view('admin.partials.dashboard');
 	}
 
 	/**

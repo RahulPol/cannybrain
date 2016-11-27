@@ -1,11 +1,11 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\Admin\Configuration;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class QuestionBankController extends Controller {
+class ChaptersController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -14,7 +14,7 @@ class QuestionBankController extends Controller {
 	 */
 	public function index()
 	{
-		return view('admin.partials.configuration.questionbank');
+		return view('admin.partials.configuration.chapters');
 	}
 
 	/**

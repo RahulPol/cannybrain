@@ -1,11 +1,21 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\Admin\Configuration;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Repositories\Category\CategoryRepository;
 
-use Illuminate\Http\Request;
+use Request;
+use Response;
+use Auth;
 
-class AdminDashboardController extends Controller {
+class CategoriesController extends Controller {
+
+	private $category;
+
+	public function __construct(CategoryRepository $category)
+	{
+		$this->category = $category; 
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -14,7 +24,15 @@ class AdminDashboardController extends Controller {
 	 */
 	public function index()
 	{
-		return view('admin.partials.dashboard');
+		return view('admin.partials.configuration.categories');
+	}
+
+	public function getAllCategories()
+	{
+		if(Request::ajax())
+		{
+			return $this->category->getAll();
+		}
 	}
 
 	/**
@@ -24,7 +42,22 @@ class AdminDashboardController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		if(Request::ajax()) 
+		{
+			sleep(5);
+			if(Auth::check() && Auth::user()->role->name == "user")
+			{
+				$attributes = array();
+				$attributes['name'] = Request::input('categoryName');	
+				$attributes['user_id'] = Auth::user()->id;
+				$attributes['is_active'] = true;
+
+				return $this->category->create($attributes);
+			}
+
+					
+			return Response::json(array('code'=>401, 'message'=> "Not authorized to create category"),401);
+		}
 	}
 
 	/**
