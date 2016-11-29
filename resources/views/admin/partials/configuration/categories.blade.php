@@ -182,8 +182,8 @@
                                     +"</td>" 
                                     +"<td>"
                                         +'<div class="btn-group" role="group" aria-label="...">'                                        
-                                        +'<image src="{{ asset("build/img/icons/edit-record.png") }}" style="color:yellow;width:2em;height:2em" aria-hidden="true" data-update-id="'+category.id+'"></i>'                                        
-                                        +'<image src="{{ asset("build/img/icons/delete-record.png") }}" style="padding-left:1em;width:2em;height:2em" aria-hidden="true" data-delete-id = "'+category.id+'"></i>'
+                                        +'<image src="{{ asset("build/img/icons/edit-record.png") }}" style="width:2.8em;height:2em;cursor:pointer" aria-hidden="true" data-update-id="'+category.id+'"></i>'                                        
+                                        +'<image src="{{ asset("build/img/icons/delete-record.png") }}" style="padding-left:1em;width:2.8em;height:2em;cursor:pointer" aria-hidden="true" data-delete-id = "'+category.id+'"></i>'
                                         +'</div>'
                                     +"</td>" 
                                 +"</tr>");
@@ -197,12 +197,12 @@
                                 "order": [[ 2, "desc" ]],
                                 "info": true,
                                 "autoWidth": false                  
-                            });   
-                            $('#categoryDetailsOverlay').css('display','none');
+                            });                               
                             
                         }else{
                             // TODO: Add No Data Available Watermark 
                         }
+                        $('#categoryDetailsOverlay').css('display','none');
                     },
                     error:function(err){
                         $('#categoryDetailsOverlay').css('display','none');
@@ -220,9 +220,10 @@
                 formData = {
                     categoryName: $('#categoryName').val()          
                 },
-                type="Post",
+                type="POST",
                 dataType="json";                
 
+                console.log('form data',formData);
                 $.ajax({
                     type:type,
                     url:createCategoryUrl,
@@ -237,6 +238,8 @@
                         $('#createResponse').addClass('has-success');
                         $('#createResponse span').html('Category created successfully.');
                         $('#createResponse').slideDown().delay(1500).slideUp();
+                        $('#categoryName').val("");
+                        getAllCategories();
 
                     },
                     error:function(err){
@@ -245,6 +248,7 @@
                         $('#createResponse').addClass('has-error');
                         $('#createResponse span').html("Erro while creating category.");
                         $('#createResponse').slideDown().delay(1500).slideUp();
+                        $('#categoryName').val("");
 
                     }
                 });

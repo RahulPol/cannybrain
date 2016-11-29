@@ -30,7 +30,7 @@ class CategoriesController extends Controller
     public function getAllCategories()
     {
         if (Request::ajax()) {
-            return $this->category->getAll();
+            return $this->category->getAllForUser(Auth::user()->id);
         }
     }
 
@@ -41,18 +41,13 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        if (Request::ajax()) {
-            if (Auth::check() && Auth::user()->role->name == "admin") {
-                $attributes = array();
-                $attributes['name'] = Request::input('categoryName');
-                $attributes['user_id'] = Auth::user()->id;
-                $attributes['is_active'] = true;
+        if (Request::ajax()) {            
+            $attributes = array();
+            $attributes['name'] = Request::input('categoryName');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['is_active'] = true;
 
-                return $this->category->create($attributes);
-            }
-
-                    
-            return Response::json(array('code'=>401, 'message'=> "Not authorized to create category"), 401);
+            return $this->category->create($attributes);            
         }
     }
 

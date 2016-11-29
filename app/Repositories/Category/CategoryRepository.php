@@ -2,7 +2,7 @@
 
 interface CategoryRepository
 {
-    public function getAll();
+    public function getAllForUser($user);
 
     public function getById($id);
 

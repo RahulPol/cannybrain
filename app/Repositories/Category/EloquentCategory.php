@@ -1,5 +1,6 @@
 <?php namespace App\Repositories\Category;
 use App\Category;
+use Auth;
 
 class EloquentCategory  implements CategoryRepository 
 {
@@ -11,9 +12,13 @@ class EloquentCategory  implements CategoryRepository
         $this->model = $model;
     }
 
-    public function getAll()
+    public function getAllForUser($user)
     {
-        return $this->model->with('user')->get();
+        return $this
+            ->model
+            ->with('user')
+            ->authorizedForUser($user)
+            ->get();
     }
 
     public function getById($id)

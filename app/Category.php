@@ -14,4 +14,9 @@ class Category extends Model {
 		return $this -> belongsTo('App\User');
 	}
 
+	public function scopeAuthorizedForUser($query,$user)
+	{
+		return $query->where('user_id',$user);
+	}
+
 }
