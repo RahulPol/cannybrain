@@ -53,9 +53,11 @@
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             <form  id="categoryForm" class="" data-parsley-validate=""> 
-                                                
-                                                <div id="createResponse" class="form-group">
-                                                    <span class="help-block"></span>
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <div id="createResponse" class="form-group text-center" style="display:none">
+                                                    <span class="help-block">        
+                                                                                                        
+                                                    </span>
                                                 </div>
 
                                                 <div  class="form-group has-feedback" style="font-size:12px">                        
@@ -89,8 +91,31 @@
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             
+                                                <table id="categoryDetails" class="table table-bordered table-hover" >
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                Name
+                                                            </th>
+
+                                                            <th>
+                                                                Created By
+                                                            </th>
+
+                                                            <th>
+                                                                Last Modified On
+                                                            </th>
+
+                                                            <th>
+                                                                Action
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+
+                                            
                                         </div><!-- /.box-body -->
-                                        <div class="overlay">
+                                        <div id='categoryDetailsOverlay' class="overlay" style="display:none">
                                             <i class="fa fa-refresh fa-spin"></i>
                                         </div>
                                 </div><!-- /.box -->
@@ -112,7 +137,8 @@
 @section('customScript')
 <script>
         $(function(){            
-            var url = "/a/configuration/categories";
+            var url = "/a/configuration/categories",
+                categoriesDetails = [];
 
             //setup token for session so that token mismatch error is avoided;
             //As this is done on function ready. This is a global setup for token.
@@ -123,25 +149,68 @@
             });
 
             //Initialize Category page with category details using ajax call.
-            var getAllCategories = function(){
-                var categoriesDetails =[]; 
+            var getAllCategories = function(){                
 
                 var getAllCategoriesUrl = url + "/getAllCategories",
                     type= "Get",
-                    dataType = "json";
-
+                    dataType = "json";                
+                
                 $.ajax({
                     type:type,
                     url:getAllCategoriesUrl,
                     dataType:dataType,
+                    beforeSend:function(){
+                        $('#categoryDetailsOverlay').css('display','block');
+                    },
                     success:function(resp){
-                        console.log("Categories details...",resp);
+                        //append categoryDetails to data table
+                        $('#categoryDetails').DataTable().destroy();
+                        $('tbody').html('');
+
+                        //retrieve categories in categoriesDetails array
+                        if(resp.length > 0){
+                            resp.forEach(function(category){
+                                $('tbody').append("<tr id ='row-"+ category.id +"'>" 
+                                    +"<td>"
+                                        + category.name
+                                    +"</td>"
+                                    +"<td>"
+                                        + category.user.name
+                                    +"</td>"
+                                    +"<td>"
+                                        + moment(category.updated_at).format("MMM Do YY")
+                                    +"</td>" 
+                                    +"<td>"
+                                        +'<div class="btn-group" role="group" aria-label="...">'                                        
+                                        +'<image src="{{ asset("build/img/icons/edit-record.png") }}" style="color:yellow;width:2em;height:2em" aria-hidden="true" data-update-id="'+category.id+'"></i>'                                        
+                                        +'<image src="{{ asset("build/img/icons/delete-record.png") }}" style="padding-left:1em;width:2em;height:2em" aria-hidden="true" data-delete-id = "'+category.id+'"></i>'
+                                        +'</div>'
+                                    +"</td>" 
+                                +"</tr>");
+                            });
+                            
+                             $('#categoryDetails').DataTable({
+                                "paging": true,
+                                "lengthChange": true,
+                                "searching": true,
+                                "ordering": true,
+                                "order": [[ 2, "desc" ]],
+                                "info": true,
+                                "autoWidth": false                  
+                            });   
+                            $('#categoryDetailsOverlay').css('display','none');
+                            
+                        }else{
+                            // TODO: Add No Data Available Watermark 
+                        }
                     },
                     error:function(err){
-
+                        $('#categoryDetailsOverlay').css('display','none');
                     }
                 });
             }
+
+            
 
             //Create new category
             $('#btnSubmitCategory').on('click',function(e){   
@@ -166,13 +235,17 @@
                         console.log('response...',resp);
                         $('#createCategoryOverlay').css('display','none');
                         $('#createResponse').addClass('has-success');
-                        $('#createResponse span').append('Category created successfully.')
+                        $('#createResponse span').html('Category created successfully.');
+                        $('#createResponse').slideDown().delay(1500).slideUp();
+
                     },
                     error:function(err){
                         $('#createCategoryOverlay').css('display','none');
                         console.log('error for category post...',err);
                         $('#createResponse').addClass('has-error');
-                        $('#createResponse span').append(err.responseJSON.message);
+                        $('#createResponse span').html("Erro while creating category.");
+                        $('#createResponse').slideDown().delay(1500).slideUp();
+
                     }
                 });
                 
