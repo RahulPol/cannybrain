@@ -13,7 +13,7 @@ class EloquentCategory  implements CategoryRepository
 
     public function getAll()
     {
-        return $this->model->all();
+        return $this->model->with('user')->get();
     }
 
     public function getById($id)
