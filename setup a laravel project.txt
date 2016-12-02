@@ -222,18 +222,21 @@ class CreatePasswordResetsTable extends Migration {
 create table company
 (
     id int unsigned NOT NULL auto_increment primary key,
-    name varchar(5000) not null,
-    location varchar(5000) null,
-    logo varchar(500) null,
+    name text not null,
+    location text null,
+    logo text null,
     created_at datetime not null,
     updated_at datetime not null,
     is_active bit not null
 )
 
+run the migrations using following command
+php artisan migrate 
+
 create table category
 (
 	id int unsigned NOT NULL auto_increment primary key,
-    name text not null,    
+    name varchar(500) not null,    
     user_id int unsigned not null,    
     company_id int unsigned not null,
     created_at datetime not null,
@@ -242,7 +245,8 @@ create table category
     CONSTRAINT category_users_id_foreign FOREIGN KEY (user_id)
 	REFERENCES users(id),
     CONSTRAINT category_company_id_foreign FOREIGN KEY (company_id)
-	REFERENCES company(id)
+	REFERENCES company(id),
+    CONSTRAINT category_name_company_id_unique UNIQUE (name,company_id)
 );
 
 
@@ -252,7 +256,7 @@ create table category
 create table chapter
 (
 	id int unsigned NOT NULL auto_increment primary key,
-    name text not null,    
+    name varchar(500) not null,    
     category_id int unsigned not null,  
     user_id int unsigned unsigned not null,
     company_id int unsigned not null,
@@ -264,7 +268,8 @@ create table chapter
     CONSTRAINT chapter_users_id_foreign FOREIGN KEY (user_id)
 	REFERENCES users(id),
     CONSTRAINT chapter_company_id_foreign FOREIGN KEY (company_id)
-	REFERENCES company(id)
+	REFERENCES company(id),
+    CONSTRAINT category_name_category_id_company_id_unique UNIQUE (name,category_id,company_id)
 )
 
 create table answer_type
@@ -293,11 +298,17 @@ create table question
     answer_type text null,
     negative_weightage decimal(18,8) null,
     chapter_id int unsigned not null,
+    category_id int unsigned not null,
+    user_id int unsigned not null,
     created_at datetime not null,
     updated_at datetime not null,
     is_active bit not null,
     CONSTRAINT question_chapter_id_foreign FOREIGN KEY (chapter_id)
-	REFERENCES chapter(id)
+	REFERENCES chapter(id),
+	CONSTRAINT question_category_id_foreign FOREIGN KEY (category_id)
+	REFERENCES category(id),
+    CONSTRAINT question_users_id_foreign FOREIGN KEY (user_id)
+	REFERENCES users(id)
 )
 
 
@@ -370,3 +381,11 @@ create table user_feedback
     CONSTRAINT user_feedback_user_id_foreign FOREIGN KEY (user_id)
 	REFERENCES users(id)
 )
+
+8.Add following constraints
+alter table users
+add constraint users_email_company_id unique(email,company_id)
+
+9.Add an entry to company table
+insert into company (name,location,logo,created_at,updated_at,is_active)
+values('Aptech','Mumbai',null,curdate(),curdate(),1);
