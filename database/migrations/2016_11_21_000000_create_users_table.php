@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
-            $table->integer('company_id');
+            $table->integer('company_id')->unsigned();
             $table->string('group_name')->nullable();
             $table->date('dob')->nullable();
             $table->string('mobile_number');
@@ -34,6 +34,8 @@ class CreateUsersTable extends Migration
             $table->foreign('company_id')
                   ->references('id')
                   ->on('company');
+
+            $table->unique('id', 'company_id');
         });
     }
 
