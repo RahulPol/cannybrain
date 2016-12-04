@@ -27,16 +27,20 @@ Route::group(['middleware'=>['auth','auth.admin']],function(){
 	Route::get('a/configuration/categories',[ 'uses'=>'Admin\Configuration\CategoriesController@index']);
 	Route::get('a/configuration/categories/getAllCategories',[ 'uses'=>'Admin\Configuration\CategoriesController@getAllCategories']);
 	Route::post('a/configuration/categories',[ 'uses'=>'Admin\Configuration\CategoriesController@create']);
+	Route::put('a/configuration/categories',[ 'uses'=>'Admin\Configuration\CategoriesController@update']);
+	Route::delete('a/configuration/categories',[ 'uses'=>'Admin\Configuration\CategoriesController@destroy']);
+	Route::get('a/configuration/categories/getCategoriesDropdown',[ 'uses'=>'Admin\Configuration\CategoriesController@getCategoriesDropdown']);
 
 	#Section Configuration/Chapters
 	Route::get('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@index']);
+	Route::post('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@create']);
 
 	#Section Configuration/QuestionBank
 	Route::get('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@index']);
 	
 });
 
-Route::group(['middleware'=>['auth']],function(){
+Route::group(['middleware'=>['auth','auth.user']],function(){
 	Route::get('u', function(){
 		return 'user logged in';
 	});
