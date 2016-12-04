@@ -6,7 +6,7 @@ class Category extends Model {
 
 	protected $table = 'category';
 
-	protected $fillable = ['name','user_id','is_active'];
+	protected $fillable = ['name','user_id','company_id','is_active'];
 
 	//A category must be created by user(admin).
 	public function user()
@@ -14,9 +14,19 @@ class Category extends Model {
 		return $this -> belongsTo('App\User');
 	}
 
+	public function company()
+	{
+		return $this -> belongsTo('App\Company');
+	}
+
 	public function scopeAuthorizedForUser($query,$user)
 	{
 		return $query->where('user_id',$user);
+	}
+
+	public function scopeForCompany($query,$company)
+	{
+		return $query->where('company_id',$company);
 	}
 
 }
