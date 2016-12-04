@@ -12,12 +12,13 @@ class EloquentCategory  implements CategoryRepository
         $this->model = $model;
     }
 
-    public function getAllForUser($user)
+    public function getAllForCompany($company)
     {
         return $this
             ->model
             ->with('user')
-            ->authorizedForUser($user)
+            ->with('company')
+            ->forCompany($company)
             ->get();
     }
 
@@ -41,7 +42,16 @@ class EloquentCategory  implements CategoryRepository
 
     public function delete($id)
     {
-        $this->getById($id)->delete();
-        return true;
+        $this->model->findOrFail($id)->delete();
+        return "true";
+    }
+
+    public function getCategoriesDropdownForCompany($company)
+    {
+        return $this
+            ->model
+            ->forCompany($company)
+            ->orderBy('name')
+            ->get(['id','name']);
     }
 }

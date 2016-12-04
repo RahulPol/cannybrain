@@ -2,7 +2,7 @@
 
 interface CategoryRepository
 {
-    public function getAllForUser($user);
+    public function getAllForCompany($company);
 
     public function getById($id);
 
@@ -11,5 +11,7 @@ interface CategoryRepository
     public function update($id, array $attributes);
 
     public function delete($id);
+
+    public function getCategoriesDropdownForCompany($company);
 }
 

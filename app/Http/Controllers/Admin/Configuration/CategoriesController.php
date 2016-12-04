@@ -7,10 +7,15 @@ use App\Repositories\Category\CategoryRepository;
 use Request;
 use Response;
 use Auth;
+use Debugbar;
+use Validator;
+use Input;
 
 class CategoriesController extends Controller
 {
     private $category;
+    
+    private $validationRules = array('name' => 'required|max:255');
 
     public function __construct(CategoryRepository $category)
     {
@@ -28,9 +33,9 @@ class CategoriesController extends Controller
     }
 
     public function getAllCategories()
-    {
-        if (Request::ajax()) {
-            return $this->category->getAllForUser(Auth::user()->id);
+    {                  
+        if (Request::ajax()) {                       
+            return $this->category->getAllForCompany(Auth::user()->company->id);
         }
     }
 
@@ -40,14 +45,47 @@ class CategoriesController extends Controller
      * @return Response
      */
     public function create()
-    {
-        if (Request::ajax()) {            
-            $attributes = array();
-            $attributes['name'] = Request::input('categoryName');
-            $attributes['user_id'] = Auth::user()->id;
-            $attributes['is_active'] = true;
+    {        
+        
+        if (Request::ajax()) {
+            $validator = Validator::make(Input::all(), $this->validationRules);
 
-            return $this->category->create($attributes);            
+            if ($validator->fails())
+            {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $validator->getMessageBag()->toArray()
+                ), 400); 
+            }        
+
+            $attributes = array();
+            $attributes['name'] = Request::input('name');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['company_id'] = Auth::user()->company->id;
+            $attributes['is_active'] = true;
+            
+            try{
+                return $this->category->create($attributes);
+
+            }catch (\Illuminate\Database\QueryException $e){            
+                $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    return Response::json(array(
+                        'success' => false,
+                        'errors' => "Category already exists."
+                    ), 400);
+                }
+
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Database error, please contact admin."
+                    ), 400);            
+            }catch(\Exception $e){
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Error while creating category"
+                    ), 400);
+            }                        
         }
     }
 
@@ -89,10 +127,51 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
-    {
-        //
+    public function update()
+    {        
+        if (Request::ajax()) {      
+            $validator = Validator::make(Input::all(), $this->validationRules);
+
+            if ($validator->fails())
+            {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $validator->getMessageBag()->toArray()
+                ), 400); 
+            } 
+
+            $attributes = array();
+            $id  = Request::input('categoryId');
+            $attributes['name'] = Request::input('name');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['company_id'] = Auth::user()->company->id;
+            $attributes['is_active'] = true;
+                        
+            try{
+                return $this->category->update($id, $attributes); 
+
+            }catch (\Illuminate\Database\QueryException $e){            
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Database error, please contact admin."
+                    ), 400);            
+            }catch(\Exception $e){
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Error while creating category"
+                    ), 400);
+            }            
+        }
     }
+
+
+    public function getCategoriesDropdown()
+    {                  
+        if (Request::ajax()) {                       
+            return $this->category->getCategoriesDropdownForCompany(Auth::user()->company->id);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -100,8 +179,12 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        if (Request::ajax()) {                                         
+            $id  = Request::input('categoryId');            
+            
+            return $this->category->delete($id);            
+        }
     }
 }
