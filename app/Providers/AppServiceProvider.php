@@ -3,6 +3,8 @@
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\EloquentCategory;
+use App\Repositories\Chapter\ChapterRepository;
+use App\Repositories\Chapter\EloquentChapter;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider {
 		);
 
 		$this->app->singleton(CategoryRepository::class,EloquentCategory::class);
+		$this->app->singleton(ChapterRepository::class,EloquentChapter::class);
 	}
 
 }

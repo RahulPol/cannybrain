@@ -2,10 +2,24 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Repositories\Chapter\ChapterRepository;
 
-use Illuminate\Http\Request;
+use Request;
+use Response;
+use Auth;
+use Validator;
+use Input;
 
 class ChaptersController extends Controller {
+
+	private $chapter;
+    
+    private $validationRules = array('name' => 'required|max:255','category_id'=>'required|integer');
+
+	public function __construct(ChapterRepository $chapter)
+    {
+        $this->chapter = $chapter;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -17,6 +31,14 @@ class ChaptersController extends Controller {
 		return view('admin.partials.configuration.chapters');
 	}
 
+
+	public function getAllChapters()
+    {                  
+        if (Request::ajax()) {                       
+            return $this->chapter->getAllForCompany(Auth::user()->company->id);
+        }
+    }
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -24,7 +46,47 @@ class ChaptersController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		if (Request::ajax()) {
+            $validator = Validator::make(Input::all(), $this->validationRules);
+
+            if ($validator->fails())
+            {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $validator->getMessageBag()->toArray()
+                ), 400); 
+            }        
+
+            $attributes = array();
+            $attributes['name'] = Request::input('name');
+			$attributes['category_id'] = Request::input('category_id');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['company_id'] = Auth::user()->company->id;
+            $attributes['is_active'] = true;
+            
+            try{
+                return $this->chapter->create($attributes);
+
+            }catch (\Illuminate\Database\QueryException $e){            
+                $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    return Response::json(array(
+                        'success' => false,
+                        'errors' => "Chapter already exists."
+                    ), 400);
+                }
+
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Database error, please contact admin."
+                    ), 400);            
+            }catch(\Exception $e){
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Error while creating chapter"
+                    ), 400);
+            }                        
+        }
 	}
 
 	/**
