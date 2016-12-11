@@ -33,10 +33,15 @@ Route::group(['middleware'=>['auth','auth.admin']],function(){
 
 	#Section Configuration/Chapters
 	Route::get('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@index']);
+	Route::get('a/configuration/chapters/getAllChapters',[ 'uses'=>'Admin\Configuration\ChaptersController@getAllChapters']);
 	Route::post('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@create']);
+	Route::put('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@update']);
+	Route::delete('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@destroy']);
 
 	#Section Configuration/QuestionBank
 	Route::get('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@index']);
+	Route::get('a/configuration/questionbank/mcq',[ 'uses'=>'Admin\Configuration\QuestionBankController@mcq']);
+
 	
 });
 
