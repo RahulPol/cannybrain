@@ -14,7 +14,8 @@ class ChaptersController extends Controller {
 
 	private $chapter;
     
-    private $validationRules = array('name' => 'required|max:255','category_id'=>'required|integer');
+    private $createvalidationRules = array('name' => 'required|max:255','category_id'=>'required|integer');
+	private $updatevalidationRules = array('name' => 'required|max:255','category_id'=>'required|integer','chapter_id'=>'required|integer');
 
 	public function __construct(ChapterRepository $chapter)
     {
@@ -47,7 +48,7 @@ class ChaptersController extends Controller {
 	public function create()
 	{
 		if (Request::ajax()) {
-            $validator = Validator::make(Input::all(), $this->validationRules);
+            $validator = Validator::make(Input::all(), $this->createvalidationRules);
 
             if ($validator->fails())
             {
@@ -127,9 +128,50 @@ class ChaptersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update()
 	{
-		//
+		if (Request::ajax()) {      
+            $validator = Validator::make(Input::all(), $this->updatevalidationRules);
+
+            if ($validator->fails())
+            {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $validator->getMessageBag()->toArray()
+                ), 400); 
+            } 
+
+            $attributes = array();
+            $id  = Request::input('chapter_id');
+			$attributes['category_id']  = Request::input('category_id');
+            $attributes['name'] = Request::input('name');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['company_id'] = Auth::user()->company->id;
+            $attributes['is_active'] = true;
+                        
+            try{
+                return $this->chapter->update($id, $attributes); 
+
+            }catch (\Illuminate\Database\QueryException $e){ 
+				$errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    return Response::json(array(
+                        'success' => false,
+                        'errors' => "Chapter for given category already exists."
+                    ), 400);
+                }
+
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Database error, please contact admin."
+                    ), 400);            
+            }catch(\Exception $e){
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Error while creating category"
+                    ), 400);
+            }            
+        }
 	}
 
 	/**
@@ -140,7 +182,11 @@ class ChaptersController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		if (Request::ajax()) {                                         
+            $id  = Request::input('chapter_id');            
+            
+            return $this->chapter->delete($id);            
+        }
 	}
 
 }
