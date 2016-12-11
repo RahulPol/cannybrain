@@ -27,6 +27,11 @@ class QuestionBankController extends Controller {
 		//
 	}
 
+	public function mcq()
+	{
+		return view('admin.partials.configuration.questionType.mcq');
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
