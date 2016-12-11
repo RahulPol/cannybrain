@@ -8,6 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="UTF-8">
     <title>{{ $page_title or "CannyBrain" }}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>   
+    <link rel="icon" href="{!! url('build/img/favicon.ico') !!}"/>
     
     {!! Html::style(elixir('css/app.css')) !!}
     {!! Html::style(elixir('css/utility.css')) !!}
