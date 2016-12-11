@@ -15,7 +15,9 @@ class CategoriesController extends Controller
 {
     private $category;
     
-    private $validationRules = array('name' => 'required|max:255');
+    private $createValidationRules = array('name' => 'required|max:255');
+    private $updateValidationRules = array('name' => 'required|max:255','category_id'=>'required|integer');
+    private $destroyValidationRules = array('category_id'=>'required|integer');
 
     public function __construct(CategoryRepository $category)
     {
@@ -48,7 +50,7 @@ class CategoriesController extends Controller
     {        
         
         if (Request::ajax()) {
-            $validator = Validator::make(Input::all(), $this->validationRules);
+            $validator = Validator::make(Input::all(), $this->createValidationRules);
 
             if ($validator->fails())
             {
@@ -130,7 +132,7 @@ class CategoriesController extends Controller
     public function update()
     {        
         if (Request::ajax()) {      
-            $validator = Validator::make(Input::all(), $this->validationRules);
+            $validator = Validator::make(Input::all(), $this->updateValidationRules);
 
             if ($validator->fails())
             {
@@ -141,7 +143,7 @@ class CategoriesController extends Controller
             } 
 
             $attributes = array();
-            $id  = Request::input('categoryId');
+            $id  = Request::input('category_id');
             $attributes['name'] = Request::input('name');
             $attributes['user_id'] = Auth::user()->id;
             $attributes['company_id'] = Auth::user()->company->id;
@@ -150,7 +152,15 @@ class CategoriesController extends Controller
             try{
                 return $this->category->update($id, $attributes); 
 
-            }catch (\Illuminate\Database\QueryException $e){            
+            }catch (\Illuminate\Database\QueryException $e){  
+                $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    return Response::json(array(
+                        'success' => false,
+                        'errors' => "Provided category already exists."
+                    ), 400);
+                }
+
                 return Response::json(array(
                         'success' => false,
                         'errors' => "Database error, please contact admin."
@@ -182,7 +192,7 @@ class CategoriesController extends Controller
     public function destroy()
     {
         if (Request::ajax()) {                                         
-            $id  = Request::input('categoryId');            
+            $id  = Request::input('category_id');            
             
             return $this->category->delete($id);            
         }

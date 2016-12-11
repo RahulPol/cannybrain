@@ -121,6 +121,7 @@
             background-color: rgba(0,166,90,0.8) !important;
             border-color: gray;
         }
+        /*Override Complete*/
         
     </style>
 
@@ -203,29 +204,29 @@
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             
-                                                <table id="categoryDetails" class="table table-bordered table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>
-                                                                Name
-                                                            </th>
-                                                            <th>
-                                                                Organization
-                                                            </th>
-                                                            <th>
-                                                                Created By
-                                                            </th>
+                                            <table id="categoryDetails" class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Name
+                                                        </th>
+                                                        <th>
+                                                            Organization
+                                                        </th>
+                                                        <th>
+                                                            Created By
+                                                        </th>
 
-                                                            <th>
-                                                                Last Modified On
-                                                            </th>
+                                                        <th>
+                                                            Last Modified On
+                                                        </th>
 
-                                                            <th>
-                                                                Action
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
+                                                        <th>
+                                                            Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
 
                                             
                                         </div><!-- /.box-body -->
@@ -454,12 +455,13 @@
                     $('.curtain-class').remove();
                 });
 
+                $('.custom-popover #btnEditCategory').off('click');
                 $('.custom-popover #btnEditCategory').on('click',function(e){                    
                     e.preventDefault();
 
                     var updateCategoryUrl = url ,
                         formData = {
-                            categoryId:category.id,
+                            category_id:category.id,
                             name: $('#categoryEditName').val()       
                         },
                         type="PUT",
@@ -547,7 +549,7 @@
                             action:function() {                                
                                 var deleteCategoryUrl = url ,
                                     formData = {
-                                        categoryId:category.id                                               
+                                        category_id:category.id                                               
                                     },
                                     type="DELETE",
                                     dataType="json";
