@@ -35,9 +35,9 @@ class EloquentChapter  implements ChapterRepository
 
     public function update($id, array $attributes)
     {
-        $category = $this->model->findOrFail($id);
-        $category->update($attributes);
-        return $category;
+        $chapter = $this->model->findOrFail($id);
+        $chapter->update($attributes);
+        return $chapter;
 
     }
 
