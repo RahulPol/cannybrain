@@ -1,0 +1,31 @@
+.mcq-board .question-title {
+    font-size: 24px;
+}
+
+.mcq-board .question {
+    margin-top: 10px;
+}
+
+.mcq-board .question .question-body {
+    margin-top: 10px;
+}
+
+.mcq-board .question .question-footer {
+    margin-top: 10px;
+}
+
+.mcq-board .option {
+    margin-top: 20px;
+}
+
+.mcq-board .option .option-set .option-set-title {
+    font-size: 24px;
+}
+
+.mcq-board .option .option-set .option-body .option-body-header .option-body-title {
+    font-size: 24px;
+}
+
+.mcq-board .option .option-set .option-body {
+    margin-top: 10px;
+}
