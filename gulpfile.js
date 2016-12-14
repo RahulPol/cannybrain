@@ -52,38 +52,13 @@ elixir(function (mix) {
     )
 
     .copy(
-        'node_modules/admin-lte/bootstrap/css',
-        'resources/assets/css/bootstrap'
-    )
-
-    .copy(
-        'node_modules/admin-lte/dist/css',
-        'resources/assets/css/adminlte'
-    )
-
-    .copy(
-        'node_modules/admin-lte/plugins/select2/select2.min.css',
-        'resources/assets/css/select2'
-    )
-
-    .copy(
-        'node_modules/parsleyjs/src/parsley.css',
-        'resources/assets/css/parsley'
-    )
-
-    .copy(
-        'node_modules/admin-lte/plugins/datatables/dataTables.bootstrap.css',
-        'resources/assets/css/dataTables'
-    )
-
-    .copy(
-        'node_modules/jquery-confirm/dist/jquery-confirm.min.css',
-        'resources/assets/css/jquery-confirm/jquery.confirm.min.css'
-    )
-
-    .copy(
         'node_modules/jquery/dist/jquery.min.js',
         'resources/assets/js/jquery'
+    )
+
+    .copy(
+        'node_modules/admin-lte/bootstrap/css',
+        'resources/assets/css/bootstrap'
     )
 
     .copy(
@@ -92,8 +67,18 @@ elixir(function (mix) {
     )
 
     .copy(
+        'node_modules/admin-lte/dist/css',
+        'resources/assets/css/adminlte'
+    )
+
+    .copy(
         'node_modules/admin-lte/dist/js',
         'resources/assets/js/adminlte'
+    )
+
+    .copy(
+        'node_modules/admin-lte/plugins/select2/select2.min.css',
+        'resources/assets/css/select2'
     )
 
     .copy(
@@ -102,8 +87,18 @@ elixir(function (mix) {
     )
 
     .copy(
+        'node_modules/parsleyjs/src/parsley.css',
+        'resources/assets/css/parsley'
+    )
+
+    .copy(
         'node_modules/parsleyjs/dist/parsley.min.js',
         'resources/assets/js/parsley'
+    )
+
+    .copy(
+        'node_modules/admin-lte/plugins/datatables/dataTables.bootstrap.css',
+        'resources/assets/css/dataTables'
     )
 
     .copy(
@@ -127,8 +122,33 @@ elixir(function (mix) {
     )
 
     .copy(
+        'node_modules/jquery-confirm/dist/jquery-confirm.min.css',
+        'resources/assets/css/jquery-confirm/jquery.confirm.min.css'
+    )
+
+    .copy(
         'node_modules/jquery-confirm/dist/jquery-confirm.min.js',
         'resources/assets/js/jquery-confirm/jquery.confirm.min.js'
+    )
+
+    .copy(
+        'node_modules/react/dist/react.js',
+        'resources/assets/js/react/react.js'
+    )
+
+    .copy(
+        'node_modules/react-dom/dist/react-dom.js',
+        'resources/assets/js/react/react-dom.js'
+    )
+
+    .copy(
+        'resources/assets/js/ckeditor',
+        'public/build/js/ckeditor'
+    )
+
+    .copy(
+        'resources/assets/jsx',
+        'public/build/jsx'
     )
 
     .styles([
@@ -144,7 +164,8 @@ elixir(function (mix) {
         'select2/select2.min.css',
         'pace/pace-theme-flash.css',
         'jquery-confirm/jquery.confirm.min.css',
-        'cannybrain/site.css'
+        'cannybrain/site.css',
+        'cannybrain/mcq.css'
     ], 'public/css/utility.css')
 
     .styles([
@@ -178,6 +199,12 @@ elixir(function (mix) {
         'dataTables/dataTables.select.min.js'
     ], 'public/js/dataTables.js')
 
+    .scripts([
+        'react/react.js',
+        'react/react-dom.js',
+        'react/browser.min.js',
+    ], 'public/js/react.js')
+
     /**
      * Apply version control
      */
@@ -188,7 +215,8 @@ elixir(function (mix) {
         "public/css/utility.css",
         "public/js/utility.js",
         "public/css/dataTables.css",
-        "public/js/dataTables.js"
+        "public/js/dataTables.js",
+        "public/js/react.js"
     ]);
 
 

@@ -11,6 +11,8 @@
     "jquery": "^2.1.4",
     "jquery-confirm": "^3.0.0",
     "moment": "^2.15.1",
-    "parsleyjs": "^2.6.0"
+    "parsleyjs": "^2.6.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
   }
 }

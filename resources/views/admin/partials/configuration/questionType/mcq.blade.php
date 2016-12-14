@@ -55,20 +55,7 @@
                         <div  class =  "tab-pane active" id="categories">                       
                             <div class="row">
                                 
-                                <div class="col-md-12">
-                                    <div class="box box-default box-solid box-custom">
-                                        <div class="box-header with-border">
-                                            <h6 class="box-title"><b>Add Multiple Choice Question</b></h6>
-                                            <div class="box-tools pull-right">                                                                    
-                                            </div><!-- /.box-tools -->
-                                        </div><!-- /.box-header -->
-                                        <div class="box-body">
-                                            
-                                        </div><!-- /.box-body -->
-                                        <div id='mcqOverlay' class="overlay" style="display:none">
-                                            <i class="fa fa-refresh fa-spin"></i>
-                                        </div>
-                                </div><!-- /.box -->
+                                <div id="mcq-container" class="mcq-container col-md-12">                                                                                                                
                                 </div>
                             </div>
                         </div>
@@ -83,14 +70,24 @@
 @endsection
 
 @section('customScript')
-
+{!! Html::script(elixir('js/react.js')) !!}
+<script src="{!! url('build/js/ckeditor/ckeditor.js') !!}"></script>
+<script type="text/babel" src="{!! url('build/jsx/mcq.jsx') !!}"></script>
 <script>
     $(function(){
+    
         $('#btnAddQuestion').on('click',function(){
             var mcqUrl = window.location.protocol + "//" +  window.location.hostname + "/ReactCKEditor/mcq.html"
             window.location.href = mcqUrl;
         });
     });
 </script>
+
+<script type="text/babel">    
+        ReactDOM.render(
+            <Board action="create" questionId="10"></Board>,
+            document.getElementById('mcq-container')
+        );
+    </script>
 
 @endsection
