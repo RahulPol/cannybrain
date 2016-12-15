@@ -29,7 +29,12 @@ class QuestionBankController extends Controller {
 
 	public function mcq()
 	{
-		return view('admin.partials.configuration.questionType.mcq');
+		$action = $_REQUEST['action'];
+		
+		if($action == 'create' || ($action=='edit' && array_key_exists ('questionid' ,$_REQUEST)) )
+			return view('admin.partials.configuration.questionType.mcq')->with('action','create');
+		else
+			return redirect('a/configuration/questionbank');
 	}
 
 	/**

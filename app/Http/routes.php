@@ -37,6 +37,7 @@ Route::group(['middleware'=>['auth','auth.admin']],function(){
 	Route::post('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@create']);
 	Route::put('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@update']);
 	Route::delete('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@destroy']);
+	Route::get('a/configuration/chapters/getChaptersDropdownForCategory/{category}',[ 'uses'=>'Admin\Configuration\ChaptersController@getChaptersDropdownForCategory']);
 
 	#Section Configuration/QuestionBank
 	Route::get('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@index']);

@@ -40,6 +40,14 @@ class ChaptersController extends Controller {
         }
     }
 
+    public function getChaptersDropdownForCategory($category)
+    {
+        if(Request::ajax())
+        {
+            return $this->chapter->getChaptersDropdownForCategory(Auth::user()->company->id,$category);
+        }
+    }
+
 	/**
 	 * Show the form for creating a new resource.
 	 *

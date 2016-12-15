@@ -39,7 +39,7 @@ var Option = React.createClass({
                         <button className={optionButtonClass} onClick={this.onTickClicked}>
                             <i className="fa fa-check" style={{ paddingRight: 10 + 'px' }}></i>mark this option as answer.
                         </button>
-                        <button className="btn btn-danger btn-flat" onClick={this.remove} style={{ marginLeft: 10 + 'px' }}><i className="fa fa-trash"></i></button>
+                        <button className="btn btn-sm btn-danger btn-flat" onClick={this.remove} style={{ marginLeft: 10 + 'px' }}><i className="fa fa-trash"></i></button>
                     </span>
                 </div>
                 <div className="option-body-text">
@@ -165,6 +165,7 @@ var Question = React.createClass({
     render: function () {
         return (
             <div className="question-content col-md-12">
+                <span className="question-title">Question</span>
                 <div className="question-header">
                     <input ref="questionHeader" type="text" className="form-control" placeholder="* Question Header" ></input>
                 </div>
@@ -210,16 +211,26 @@ window.Board = React.createClass({
 
     },//preview
 
+    categoryChanged: function (categoryId) {
+        console.log('category changed to ', categoryId);
+    },//categoryChanged
+
     render: function () {
         return (
             <div className="mcq-board well well-bg col-md-12">
-                <div>
-                    <span className="question-title">Question</span>
-                    <span className="pull-right">
+                <div className='col-md-12'>
+                    <span className="pull-left">
                         <button className="btn btn-warning btn-flat" onClick={this.preview}>Preview</button>
                         <button className="btn btn-success btn-flat" onClick={this.save} style={{ marginLeft: 10 + 'px' }}>Save</button>
                     </span>
                 </div>
+                <div className='category col-md-6'>
+                    <Category ref="category" categoryChanged={this.categoryChanged} ></Category>
+                </div>
+                <div className='chapter col-md-6'>
+                    <Chapter ref="chapter"></Chapter>
+                </div>
+
                 <div className="question col-md-12">
                     <Question ref="question" action={this.props.action} questionId={this.props.questionId}></Question>
                 </div>

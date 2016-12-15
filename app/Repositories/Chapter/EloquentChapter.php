@@ -46,5 +46,15 @@ class EloquentChapter  implements ChapterRepository
         $this->model->findOrFail($id)->delete();
         return "true";
     }
+
+    public function getChaptersDropdownForCategory($company,$category)
+    {
+        return $this
+            ->model
+            ->forCompany($company)
+            ->forCategory($category)
+            ->orderBy('name')
+            ->get(['id','name']);
+    }
     
 }

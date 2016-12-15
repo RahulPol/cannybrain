@@ -1,4 +1,17 @@
-.mcq-board .question-title {
+.mcq-board .category {
+    margin-top: 10px;
+}
+
+.mcq-board .chapter {
+    margin-top: 10px;
+}
+
+.mcq-board .box-title {
+    font-weight: 700;
+}
+
+.mcq-board .question .question-content .question-title {
+    margin-left: -15px;
     font-size: 24px;
 }
 
@@ -20,6 +33,7 @@
 
 .mcq-board .option .option-set .option-set-title {
     font-size: 24px;
+    margin-left: -15px;
 }
 
 .mcq-board .option .option-set .option-body .option-body-header .option-body-title {

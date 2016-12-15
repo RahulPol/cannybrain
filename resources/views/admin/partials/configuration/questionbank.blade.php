@@ -76,7 +76,7 @@
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="/a/configuration/questionbank/mcq">MCQ</a></li>
+                                                        <li><a href="/a/configuration/questionbank/mcq?action=create">MCQ</a></li>
                                                         <li><a href="/a/configuration/questionbank/tf">True/False</a></li>
                                                         <li><a href="/a/configuration/questionbank/essay">Essay</a></li>                                                        
                                                     </ul>
@@ -109,7 +109,7 @@
 <script>
     $(function(){
         $('#btnAddQuestion').on('click',function(){
-            var mcqUrl = "/a/configuration/questionbank/mcq";
+            var mcqUrl = "/a/configuration/questionbank/mcq?action=create";
             window.location.href = mcqUrl;
         });
     });

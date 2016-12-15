@@ -4,3 +4,30 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
+
+
+/* Override select 2*/
+
+/* remove border radius added by select2 to main select */
+.select2-container--default .select2-selection--single{
+    border-radius:0px !important;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+/* provide theme background color for highlighted elements in select2 dropdown */
+.select2-container--default .select2-results__option--highlighted[aria-selected]{
+    background-color:rgba(0,166,90,0.4) !important;            
+}
+
+/* placeholder style*/
+.select2-container .select2-selection--single .select2-selection__rendered{
+    padding-left:0px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder{
+    line-height:25px !important;
+}
+
+/*End of placeholder*/
+
+/* End of Override*/

@@ -29,7 +29,7 @@
     <section class="content-header">
         <h1>
             Add Question
-            <small>{{ $page_description or null }}</small>
+            <small>{{ $page_title or null }}</small>
         </h1>
         <!-- You can dynamically generate breadcrumbs here -->
         <ol class="breadcrumb">                
@@ -72,6 +72,8 @@
 @section('customScript')
 {!! Html::script(elixir('js/react.js')) !!}
 <script src="{!! url('build/js/ckeditor/ckeditor.js') !!}"></script>
+<script type="text/babel" src="{!! url('build/jsx/category.jsx') !!}"></script>
+<script type="text/babel" src="{!! url('build/jsx/chapter.jsx') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/mcq.jsx') !!}"></script>
 <script>
     $(function(){

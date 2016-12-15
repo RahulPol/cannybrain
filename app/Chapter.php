@@ -29,4 +29,9 @@ class Chapter extends Model {
 		return $query->where('company_id',$company);
 	}
 
+	public function scopeForCategory($query,$category)
+	{
+		return $query->where('category_id',$category);
+	}
+
 }

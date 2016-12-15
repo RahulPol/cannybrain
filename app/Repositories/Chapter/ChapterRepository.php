@@ -11,5 +11,7 @@ interface ChapterRepository
     public function update($id, array $attributes);
 
     public function delete($id);    
+    
+    public function getChaptersDropdownForCategory($company, $category);
 }
 
