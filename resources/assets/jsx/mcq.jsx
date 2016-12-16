@@ -9,8 +9,13 @@ var Option = React.createClass({
         this.setState({ selected: !this.state.selected });
     },//onTickClicked
 
+    // componentWillUpdate: function () {
+    //     console.log('component will update', this);
+    // },//
+
     componentDidUpdate: function () {
-        CKEDITOR.instances[this.props.optionId].setData(this.props.optionValue);
+        console.log('component updated', CKEDITOR.instances[this.props.optionId].getData());
+        CKEDITOR.instances[this.props.optionId].setData(CKEDITOR.instances[this.props.optionId].getData());
     },
 
     componentDidMount: function () {
@@ -21,7 +26,7 @@ var Option = React.createClass({
     remove: function () {
         console.log("Removing comment");
         this.props.removeOption(this.props.index);
-    },//remove
+    },//remove    
 
     render: function () {
         var optionButtonClass = "btn btn-sm btn-default btn-flat";
@@ -101,7 +106,7 @@ var OptionSet = React.createClass({
 
         var arr = this.state.options;
         this.setState({ options: [] })
-        console.log('arr', arr);
+
         var result = [];
         var shiftFlag = false;
         for (var i = 0, l = arr.length - 1; i < l; i++) {
@@ -111,11 +116,11 @@ var OptionSet = React.createClass({
             }
 
             if (shiftFlag) {
-                option.body = CKEDITOR.instances['option' + arr[i + 1].text.toString()].getData();
+                CKEDITOR.instances['option' + arr[i].text.toString()].setData(CKEDITOR.instances['option' + arr[i + 1].text.toString()].getData())
+                this.refs['option' + arr[i].text.toString()].state = this.refs['option' + arr[i + 1].text.toString()].state;
             } else {
-                option.body = CKEDITOR.instances['option' + arr[i].text.toString()].getData();
+                CKEDITOR.instances['option' + arr[i].text.toString()].setData(CKEDITOR.instances['option' + arr[i].text.toString()].getData())
             }
-
             result.push(option);
         }
 
@@ -185,6 +190,7 @@ var Question = React.createClass({
 
 window.Board = React.createClass({
 
+
     retrieveQuestionDetails: function () {
         var question = this.refs.question;
 
@@ -207,25 +213,33 @@ window.Board = React.createClass({
 
     },//save
 
+
     preview: function () {
 
     },//preview
 
     categoryChanged: function (categoryId) {
-        console.log('category changed to ', categoryId);
-    },//categoryChanged
+        console.log('category in mcq', categoryId);
+        this.updateChapter(categoryId);
+    },//categoryChagned
+
+    updateChapter: function (categoryId) {
+        console.log('category in mcq updateChapter', categoryId);
+        this.refs.chapter.initializeChapter(categoryId);
+    },//updateChapter
+
 
     render: function () {
         return (
             <div className="mcq-board well well-bg col-md-12">
-                <div className='col-md-12'>
-                    <span className="pull-left">
+                <div className='col-md-12 board-action'>
+                    <span className="pull-right">
                         <button className="btn btn-warning btn-flat" onClick={this.preview}>Preview</button>
                         <button className="btn btn-success btn-flat" onClick={this.save} style={{ marginLeft: 10 + 'px' }}>Save</button>
                     </span>
                 </div>
                 <div className='category col-md-6'>
-                    <Category ref="category" categoryChanged={this.categoryChanged} ></Category>
+                    <Category ref="category" categoryChanged={this.categoryChanged}></Category>
                 </div>
                 <div className='chapter col-md-6'>
                     <Chapter ref="chapter"></Chapter>
@@ -238,6 +252,9 @@ window.Board = React.createClass({
                     <OptionSet ref="optionSet" action={this.props.action} questionId={this.props.questionId}></OptionSet>
                 </div>
 
+                <div className="col-md-12 answer-selection" >
+                    <AnswerSelection ref="answerSelection"></AnswerSelection>
+                </div>
             </div>
         );
     }//render

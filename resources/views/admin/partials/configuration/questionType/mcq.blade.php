@@ -74,6 +74,7 @@
 <script src="{!! url('build/js/ckeditor/ckeditor.js') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/category.jsx') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/chapter.jsx') !!}"></script>
+<script type="text/babel" src="{!! url('build/jsx/answerSelection.jsx') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/mcq.jsx') !!}"></script>
 <script>
     $(function(){

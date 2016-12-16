@@ -87,6 +87,11 @@ elixir(function (mix) {
     )
 
     .copy(
+        'node_modules/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js',
+        'resources/assets/js/slimScroll'
+    )
+
+    .copy(
         'node_modules/parsleyjs/src/parsley.css',
         'resources/assets/css/parsley'
     )
@@ -189,6 +194,7 @@ elixir(function (mix) {
         'moment/moment.min.js',
         'moment/locales.min.js',
         'jquery-confirm/jquery.confirm.min.js',
+        'slimScroll/jquery.slimscroll.min.js',
         'cannybrain/site.js'
     ], 'public/js/utility.js')
 

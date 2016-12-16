@@ -1,3 +1,8 @@
+.mcq-board .board-action {
+    display: block;
+    overflow: auto;
+}
+
 .mcq-board .category {
     margin-top: 10px;
 }
@@ -42,4 +47,9 @@
 
 .mcq-board .option .option-set .option-body {
     margin-top: 10px;
+}
+
+.mcq-board .answer-selection .title {
+    margin-left: -15px;
+    font-size: 24px;
 }
