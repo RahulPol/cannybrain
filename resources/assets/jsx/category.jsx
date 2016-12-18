@@ -52,7 +52,6 @@ window.Category = React.createClass({
     },//componentDidMount
 
     render: function () {
-        console.log('this..', this);
         return (
             <div className='box category-box'>
                 <div className='box-header with-border'>

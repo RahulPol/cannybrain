@@ -88,7 +88,7 @@
 
 <script type="text/babel">    
         ReactDOM.render(
-            <Board action="create" questionId="10"></Board>,
+            <Board action="create" questionId="-1"></Board>,
             document.getElementById('mcq-container')
         );
     </script>

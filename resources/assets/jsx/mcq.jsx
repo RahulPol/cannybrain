@@ -192,27 +192,100 @@ window.Board = React.createClass({
 
 
     retrieveQuestionDetails: function () {
+        var errorList = [];
         var question = this.refs.question;
+        var questionId = question.props.questionId;
+        var questionHeader = question.refs.questionHeader.value;
+        var questionBody = CKEDITOR.instances[question.props.questionId].getData();
+        var questionFooter = question.refs.questionFooter.value;
 
-        return {};
+        if (questionHeader == '' || questionHeader == undefined || questionHeader == null) {
+            errorList.push('Question Header can not be empty.');
+        }
+
+        if (questionBody == '' || questionBody == undefined || questionBody == null) {
+            errorList.push('Question Body can not be empty.');
+        }
+
+        if (errorList.length > 0) {
+            return {
+                errorFlag: true,
+                errorList: errorList
+            };
+        } else {
+            return {
+                errorFlag: false,
+                questionId: questionId,
+                title: questionHeader,
+                body: questionBody,
+                footer: questionFooter
+            }
+        }
     },//retrieveQuestionDetails
 
     retrieveOptionDetails: function () {
-        var optionSet = this.refs.OptionSet;
-        return [];
+        var errorList = [];
+        var result = [];
+        var optionSet = this.refs.optionSet.refs;
+
+        for (var opt in optionSet) {
+            var temp = {};
+            temp.optionId = optionSet[opt].props.optionId;
+            temp.optionValue = CKEDITOR.instances[optionSet[opt].props.optionId].getData();
+            temp.isCorrectAnswer = optionSet[opt].state.selected;
+            if (temp.optionValue == '' || temp.optionValue == null || temp.optionValue == undefined) {
+                errorList.push('option value can not be empty for ' + optionSet[opt].props.optionId);
+            }
+            result.push(temp);
+        };
+
+        if (errorList.length > 0) {
+            return {
+                errorFlag: true,
+                errorList: errorList
+            };
+        } else {
+            return {
+                errorFlag: false,
+                data: result
+            }
+        }
     },//retrieveOptionDetails
 
     save: function () {
         console.log(this);
         var questionDetails = {},
-            optionDetails = [];
+            optionDetails = [],
+            answerType = '';
 
         questionDetails = this.retrieveQuestionDetails();
         optionDetails = this.retrieveOptionDetails();
+        answerType = this.refs.answerSelection.state;
+        if ((!questionDetails.errorFlag) && (!optionDetails.errorFlag)) {
+        } else {
 
+            var content = '';
+            questionDetails.errorList.forEach(function (e) {
+                content += '<p>' + e + '</p>';
+            });
+
+            optionDetails.errorList.forEach(function (e) {
+                content += '<p>' + e + '</p>';
+            });
+
+            $.confirm({
+                title: 'Encountered error(s)!',
+                content: content,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    close: function () {
+                    }
+                }
+            });
+        }
 
     },//save
-
 
     preview: function () {
 
