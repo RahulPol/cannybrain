@@ -34,10 +34,9 @@ window.Category = React.createClass({
                     //Create category seclect 2
                     $(_this.refs.categorySelect).select2({
                         placeholder: "Select Category"
-                    })
-                        .on('change', function () {
-                            _this.change();
-                        });
+                    }).on('change', function () {
+                        _this.change();
+                    });
 
                     //use following for resetting select2
                     $("#categorySelect").val('').trigger('change');

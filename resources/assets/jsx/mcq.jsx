@@ -9,12 +9,7 @@ var Option = React.createClass({
         this.setState({ selected: !this.state.selected });
     },//onTickClicked
 
-    // componentWillUpdate: function () {
-    //     console.log('component will update', this);
-    // },//
-
     componentDidUpdate: function () {
-        console.log('component updated', CKEDITOR.instances[this.props.optionId].getData());
         CKEDITOR.instances[this.props.optionId].setData(CKEDITOR.instances[this.props.optionId].getData());
     },
 
@@ -24,7 +19,6 @@ var Option = React.createClass({
 
 
     remove: function () {
-        console.log("Removing comment");
         this.props.removeOption(this.props.index);
     },//remove    
 
@@ -95,7 +89,6 @@ var OptionSet = React.createClass({
                 body: ''
             });
 
-            console.log();
             this.setState({ options: arr });
         } else {
             alert('enough options');
@@ -123,8 +116,6 @@ var OptionSet = React.createClass({
             }
             result.push(option);
         }
-
-        console.log('result array', result);
 
         this.setState({ options: result });
 
@@ -215,6 +206,7 @@ window.Board = React.createClass({
         } else {
             return {
                 errorFlag: false,
+                errorList: errorList,
                 questionId: questionId,
                 title: questionHeader,
                 body: questionBody,
@@ -227,12 +219,14 @@ window.Board = React.createClass({
         var errorList = [];
         var result = [];
         var optionSet = this.refs.optionSet.refs;
+        var correctAnswerCount = 0;
 
         for (var opt in optionSet) {
             var temp = {};
             temp.optionId = optionSet[opt].props.optionId;
             temp.optionValue = CKEDITOR.instances[optionSet[opt].props.optionId].getData();
             temp.isCorrectAnswer = optionSet[opt].state.selected;
+            correctAnswerCount = temp.isCorrectAnswer ? ++correctAnswerCount : correctAnswerCount;
             if (temp.optionValue == '' || temp.optionValue == null || temp.optionValue == undefined) {
                 errorList.push('option value can not be empty for ' + optionSet[opt].props.optionId);
             }
@@ -242,47 +236,81 @@ window.Board = React.createClass({
         if (errorList.length > 0) {
             return {
                 errorFlag: true,
-                errorList: errorList
+                errorList: errorList,
+                correctAnswerCount: correctAnswerCount,
+                data: result
             };
         } else {
             return {
                 errorFlag: false,
+                errorList: errorList,
+                correctAnswerCount: correctAnswerCount,
                 data: result
             }
         }
     },//retrieveOptionDetails
 
     save: function () {
-        console.log(this);
-        var questionDetails = {},
+
+        var categoryId = '',
+            chapterId = '',
+            questionDetails = {},
             optionDetails = [],
             answerType = '';
 
+
+        categoryId = this.refs.category.refs.categorySelect.value;
+        chapterId = this.refs.chapter.refs.chapterSelect.value;
         questionDetails = this.retrieveQuestionDetails();
         optionDetails = this.retrieveOptionDetails();
-        answerType = this.refs.answerSelection.state;
-        if ((!questionDetails.errorFlag) && (!optionDetails.errorFlag)) {
+        answerType = this.refs.answerSelection.state.answerType;
+        console.log('data in save...', this);
+
+        if (!(questionDetails.errorFlag || optionDetails.errorFlag || chapterId == '' || categoryId == ''
+            || optionDetails.data.length < 2 || optionDetails.correctAnswerCount == 0)) {
+            if (answerType == 'radio' && optionDetails.correctAnswerCount > 1) {
+                var content = '<p>Please mark only one option as answer for Radio buttons.</p>';
+                info('Encountered error(s)!', content, 'red');
+            }
+
+            //Save question to db.
+            console.log('inside db save...', categoryId, chapterId, questionDetails, optionDetails, answerType);
+
         } else {
 
             var content = '';
+
+            content += categoryId == '' ? '<p>Please select category.</p>' : '';
+            content += chapterId == '' ? '<p>Please select chapter.</p>' : '';
+
             questionDetails.errorList.forEach(function (e) {
                 content += '<p>' + e + '</p>';
             });
+
+            if (optionDetails.data.length < 2) {
+                content += '<p>Question must have atleast two options.</p>';
+            } else {
+                if (optionDetails.correctAnswerCount == 0) {
+                    content += '<p>An Answer must be selected.</p>';
+                }
+            }
 
             optionDetails.errorList.forEach(function (e) {
                 content += '<p>' + e + '</p>';
             });
 
-            $.confirm({
-                title: 'Encountered error(s)!',
-                content: content,
-                type: 'red',
-                typeAnimated: true,
-                buttons: {
-                    close: function () {
-                    }
-                }
-            });
+            info('Encountered error(s)!', content, 'red');
+
+            // $.confirm({
+            //     title: 'Encountered error(s)!',
+            //     content: content,
+            //     type: 'red',
+            //     typeAnimated: true,
+            //     buttons: {
+            //         close: function () {
+            //         }
+            //     }
+            // });
         }
 
     },//save
@@ -292,12 +320,10 @@ window.Board = React.createClass({
     },//preview
 
     categoryChanged: function (categoryId) {
-        console.log('category in mcq', categoryId);
         this.updateChapter(categoryId);
     },//categoryChagned
 
     updateChapter: function (categoryId) {
-        console.log('category in mcq updateChapter', categoryId);
         this.refs.chapter.initializeChapter(categoryId);
     },//updateChapter
 
