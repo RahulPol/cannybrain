@@ -20,6 +20,27 @@
             border-bottom:1px solid rgba(0,0,0,0.1)
         }
 
+        .content #questionOverlay.overlay{
+            z-index: 9999;
+            background: rgba(255,255,255,0.7);
+            border-radius: 3px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display:none;
+        }
+
+         .content #questionOverlay.overlay .fa{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -15px;
+            margin-top: -15px;
+            color: #000;
+        }
+
     </style>
 
     
@@ -55,11 +76,54 @@
                         <div  class =  "tab-pane active" id="categories">                       
                             <div class="row">
                                 
-                                <div id="mcq-container" class="mcq-container col-md-12">                                                                                                                
+                                <div id="mcq-container" class="mcq-container col-md-12">                                                                                                                                                
+                                </div>                                
+
+                                <div id="questionOverlay" class="overlay" style="display:none" > 
+                                    <i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i>
                                 </div>
+
+                                <div class="col-md-12">
+                                    <div class="box box-custom box-default box-solid">
+                                        <div class="box-header with-border">
+                                            <h6 class="box-title"><b>Questions</b></h6>
+                                            <div class="box-tools pull-right">                    
+                                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                            </div><!-- /.box-tools -->
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+                                            <table id="questionDetails" class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Name
+                                                        </th>
+                                                        <th>
+                                                            Organization
+                                                        </th>
+                                                        <th>
+                                                            Created By
+                                                        </th>
+
+                                                        <th>
+                                                            Last Modified On
+                                                        </th>
+
+                                                        <th>
+                                                            Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div><!-- /.box-body -->
+                                        <div id='questionDetailsOverlay' class="overlay" style="display:none">
+                                            <i class="fa fa-refresh fa-spin"></i>
+                                        </div>
+                                </div><!-- /.box -->
+                                </div>                                
                             </div>
                         </div>
-                    
+                    <meta name="_token" content="{!! csrf_token() !!}" />   
                     </div>
                     <!-- /.tab-content -->
                 </div>
@@ -75,6 +139,7 @@
 <script type="text/babel" src="{!! url('build/jsx/category.jsx') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/chapter.jsx') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/answerSelection.jsx') !!}"></script>
+<script type="text/babel" src="{!! url('build/jsx/marks.jsx') !!}"></script>
 <script type="text/babel" src="{!! url('build/jsx/mcq.jsx') !!}"></script>
 <script>
     $(function(){

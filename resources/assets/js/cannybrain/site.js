@@ -1,15 +1,13 @@
-var info = function (title, content, type, closeFunction) {
-    closeFunction = closeFunction || function () {};
+var raiseInfo = function (title, content, type, buttons) {
+    buttons = buttons || {};
     type = type || '';
     content = content || '';
     title = title || '';
     $.confirm({
-        title: 'Encountered error(s)!',
+        title: title,
         content: content,
         type: type,
         typeAnimated: true,
-        buttons: {
-            close: closeFunction
-        }
+        buttons: buttons
     });
 }

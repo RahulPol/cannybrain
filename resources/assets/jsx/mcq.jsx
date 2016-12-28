@@ -194,9 +194,9 @@ window.Board = React.createClass({
             errorList.push('Question Header can not be empty.');
         }
 
-        if (questionBody == '' || questionBody == undefined || questionBody == null) {
-            errorList.push('Question Body can not be empty.');
-        }
+        // if (questionBody == '' || questionBody == undefined || questionBody == null) {
+        //     errorList.push('Question Body can not be empty.');
+        // }
 
         if (errorList.length > 0) {
             return {
@@ -256,7 +256,8 @@ window.Board = React.createClass({
             chapterId = '',
             questionDetails = {},
             optionDetails = [],
-            answerType = '';
+            answerType = '',
+            totalMarks = 1;
 
 
         categoryId = this.refs.category.refs.categorySelect.value;
@@ -264,17 +265,83 @@ window.Board = React.createClass({
         questionDetails = this.retrieveQuestionDetails();
         optionDetails = this.retrieveOptionDetails();
         answerType = this.refs.answerSelection.state.answerType;
+        totalMarks = this.refs.marks.refs.totalMarks.value;
         console.log('data in save...', this);
 
         if (!(questionDetails.errorFlag || optionDetails.errorFlag || chapterId == '' || categoryId == ''
             || optionDetails.data.length < 2 || optionDetails.correctAnswerCount == 0)) {
             if (answerType == 'radio' && optionDetails.correctAnswerCount > 1) {
                 var content = '<p>Please mark only one option as answer for Radio buttons.</p>';
-                info('Encountered error(s)!', content, 'red');
+                raiseInfo('Encountered error(s)!', content, 'red');
+            } else {
+
+                //Save question to db.
+                var questionSetup = {},
+                    type = 'POST',
+                    dataType = 'json',
+                    createQuestionUrl = '/a/configuration/questionbank';
+
+                questionSetup.title = questionDetails.title;
+                questionSetup.body = questionDetails.body;
+                questionSetup.footer = questionDetails.footer;
+                questionSetup.answer = '';
+                optionDetails.data.forEach(function (option) {
+                    questionSetup[option.optionId] = option.optionValue;
+                    questionSetup.answer += option.isCorrectAnswer ? (option.optionId + '|') : '';
+                });
+                questionSetup.answer_type = 'mcq';
+                questionSetup.category_id = categoryId;
+                questionSetup.chapter_id = chapterId;
+                questionSetup.answer_selection = answerType;
+                questionSetup.marks = totalMarks;
+
+                //setup token for session so that token mismatch error is avoided;
+                //As this is done on function ready. This is a global setup for token.
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: type,
+                    url: createQuestionUrl,
+                    data: questionSetup,
+                    dataType: dataType,
+                    beforeSend: function () {
+                        $('#questionOverlay').css('display', 'block');
+                    },
+                    success: function (resp) {
+                        $('#questionOverlay').css('display', 'none');
+                        var buttons = {
+                            addMore: {
+                                text: 'Add More',
+                                btnClass: 'btn-dark fa fa-plus',
+                                action: function () {
+                                    var mcqUrl = window.location.href;
+                                    window.location.href = mcqUrl;
+                                }
+                            },
+                            viewQuestion: {
+                                text: 'View Question',
+                                btnClass: 'btn-blue fa fa-list',
+                                action: function () {
+                                    var questionBank = window.location.origin + "/a/configuration/questionbank"
+                                    window.location.href = questionBank;
+                                }
+                            }
+                        };
+                        raiseInfo('Success', '<p>Question saved successfully.</p>', 'green', buttons);
+                    },
+                    error: function (err) {
+                        $('#questionOverlay').css('display', 'none');
+                        console.log('Add Error...', err);
+                        raiseInfo('Encountered error(s)!', err.responseJSON.errors, 'red');
+                    }
+                });
             }
 
-            //Save question to db.
-            console.log('inside db save...', categoryId, chapterId, questionDetails, optionDetails, answerType);
+            console.log('inside db save...', questionSetup);
 
         } else {
 
@@ -299,18 +366,7 @@ window.Board = React.createClass({
                 content += '<p>' + e + '</p>';
             });
 
-            info('Encountered error(s)!', content, 'red');
-
-            // $.confirm({
-            //     title: 'Encountered error(s)!',
-            //     content: content,
-            //     type: 'red',
-            //     typeAnimated: true,
-            //     buttons: {
-            //         close: function () {
-            //         }
-            //     }
-            // });
+            raiseInfo('Encountered error(s)!', content, 'red');
         }
 
     },//save
@@ -350,14 +406,15 @@ window.Board = React.createClass({
                 <div className="option col-md-12">
                     <OptionSet ref="optionSet" action={this.props.action} questionId={this.props.questionId}></OptionSet>
                 </div>
-
                 <div className="col-md-12 answer-selection" >
                     <AnswerSelection ref="answerSelection"></AnswerSelection>
                 </div>
+                <div className="col-md-12 answer" >
+                    <Marks ref="marks"></Marks>
+                </div>
+
             </div>
         );
     }//render
 
 });
-
-

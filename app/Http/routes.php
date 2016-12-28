@@ -41,6 +41,7 @@ Route::group(['middleware'=>['auth','auth.admin']],function(){
 
 	#Section Configuration/QuestionBank
 	Route::get('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@index']);
+	Route::post('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@create']);
 	Route::get('a/configuration/questionbank/mcq',[ 'uses'=>'Admin\Configuration\QuestionBankController@mcq']);
 
 	

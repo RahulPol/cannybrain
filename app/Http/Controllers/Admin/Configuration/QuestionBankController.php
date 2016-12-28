@@ -2,10 +2,27 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Repositories\Question\QuestionRepository;
 
-use Illuminate\Http\Request;
+use Request;
+use Response;
+use Auth;
+use Validator;
+use Input;
 
 class QuestionBankController extends Controller {
+
+	private $question;
+
+	private $createValidationRules = array('title' => 'required',
+		'optionA' => 'required','optionB' => 'required','answer' => 'required','answer_type' => 'required',
+		'chapter_id' => 'required','category_id' => 'required'
+		);
+
+	public function __construct(QuestionRepository $question)
+    {
+        $this->question = $question;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -24,7 +41,56 @@ class QuestionBankController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		if (Request::ajax()) {
+            $validator = Validator::make(Input::all(), $this->createValidationRules);
+
+            if ($validator->fails())
+            {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $validator->getMessageBag()->toArray()
+                ), 400); 
+            }  
+
+            $attributes = array();
+			$attributes['title'] = Request::input('title');
+            $attributes['body'] = Request::input('body');
+			$attributes['footer'] = Request::input('footer','');
+			$attributes['optionA'] = Request::input('optionA');
+			$attributes['optionB'] = Request::input('optionB');
+			$attributes['optionC'] = Request::input('optionC','');
+			$attributes['optionD'] = Request::input('optionD','');
+			$attributes['optionE'] = Request::input('optionE','');
+			$attributes['optionF'] = Request::input('optionF','');
+			$attributes['marks'] = Request::input('marks',1);
+			$attributes['answer'] = Request::input('answer');
+			$attributes['answer_description'] = Request::input('answer_description','');
+			$attributes['answer_type'] = Request::input('answer_type');
+			$attributes['negative_weightage'] = Request::input('negative_weightage',0);
+			$attributes['chapter_id'] = Request::input('chapter_id');
+			$attributes['category_id'] = Request::input('category_id');
+			$attributes['answer_selection'] = Request::input('answer_selection','');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['company_id'] = Auth::user()->company->id;
+            $attributes['is_active'] = true;
+            
+            try{
+                return $this->question->create($attributes);
+
+            }catch (\Illuminate\Database\QueryException $e){            
+                $errorCode = $e->errorInfo[1];
+
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Database error, please contact admin."
+                    ), 400);            
+            }catch(\Exception $e){
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Error while creating question"
+                    ), 400);
+            }                        
+        }
 	}
 
 	public function mcq()

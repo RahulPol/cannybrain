@@ -296,10 +296,12 @@ create table question
     answer text null,
     answer_description text null,
     answer_type text null,
+    answer_selection varchar(50),
     negative_weightage decimal(18,8) null,
     chapter_id int unsigned not null,
     category_id int unsigned not null,
     user_id int unsigned not null,
+    company_id int unsigned not null,
     created_at datetime not null,
     updated_at datetime not null,
     is_active bit not null,
@@ -307,6 +309,8 @@ create table question
 	REFERENCES chapter(id),
 	CONSTRAINT question_category_id_foreign FOREIGN KEY (category_id)
 	REFERENCES category(id),
+    CONSTRAINT question_company_id_foreign FOREIGN KEY (company_id)
+	REFERENCES company(id),
     CONSTRAINT question_users_id_foreign FOREIGN KEY (user_id)
 	REFERENCES users(id)
 )

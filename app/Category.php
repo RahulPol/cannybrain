@@ -19,11 +19,6 @@ class Category extends Model {
 		return $this -> belongsTo('App\Company');
 	}
 
-	public function scopeAuthorizedForUser($query,$user)
-	{
-		return $query->where('user_id',$user);
-	}
-
 	public function scopeForCompany($query,$company)
 	{
 		return $query->where('company_id',$company);
