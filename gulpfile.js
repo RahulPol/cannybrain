@@ -122,8 +122,13 @@ elixir(function (mix) {
     )
 
     .copy(
-        'node_modules/moment/min/locales.min.js',
-        'resources/assets/js/moment'
+        'node_modules/numeral/min/numeral.min.js',
+        'resources/assets/js/numeral'
+    )
+
+    .copy(
+        'node_modules/react-dom/dist/react-dom.js',
+        'resources/assets/js/react/react-dom.js'
     )
 
     .copy(
@@ -170,7 +175,8 @@ elixir(function (mix) {
         'pace/pace-theme-flash.css',
         'jquery-confirm/jquery.confirm.min.css',
         'cannybrain/site.css',
-        'cannybrain/mcq.css'
+        'cannybrain/mcq.css',
+        'cannybrain/questionViewer.css'
     ], 'public/css/utility.css')
 
     .styles([
@@ -193,6 +199,7 @@ elixir(function (mix) {
         'pace/pace.min.js',
         'moment/moment.min.js',
         'moment/locales.min.js',
+        'numeral/numeral.min.js',
         'jquery-confirm/jquery.confirm.min.js',
         'slimScroll/jquery.slimscroll.min.js',
         'cannybrain/site.js'

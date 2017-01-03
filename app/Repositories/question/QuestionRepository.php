@@ -2,7 +2,7 @@
 
 interface QuestionRepository
 {
-    public function getAllForCompany($company);
+    public function getAllForCompany($company,$answerType,$category);
 
     public function getById($id);
 
@@ -10,6 +10,6 @@ interface QuestionRepository
 
     public function update($id, array $attributes);
 
-    public function delete($id);
+    public function delete($id);    
 }
 

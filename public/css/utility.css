@@ -129,29 +129,51 @@ input:-webkit-autofill:active {
 }
 
 
+/*admin lte fixed footer style*/
+
+.main-footer {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 999;
+}
+
+
+/*fixed footer style complete*/
+
+
 /* Override select 2*/
 
+
 /* remove border radius added by select2 to main select */
-.select2-container--default .select2-selection--single{
-    border-radius:0px !important;
-    border: 1px solid rgba(0,0,0,0.2);
+
+.select2-container--default .select2-selection--single {
+    border-radius: 0px !important;
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
+
 
 /* provide theme background color for highlighted elements in select2 dropdown */
-.select2-container--default .select2-results__option--highlighted[aria-selected]{
-    background-color:rgba(0,166,90,0.4) !important;            
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: rgba(0, 166, 90, 0.4) !important;
 }
+
 
 /* placeholder style*/
-.select2-container .select2-selection--single .select2-selection__rendered{
-    padding-left:0px !important;
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 0px !important;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__placeholder{
-    line-height:25px !important;
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    line-height: 25px !important;
 }
+
 
 /*End of placeholder*/
+
 
 /* End of Override*/
 .mcq-board .board-action {
@@ -214,4 +236,67 @@ input:-webkit-autofill:active {
     margin-left: -15px;
     font-size: 24px;
 }
+.btn-filter {
+    background-color: rgba(0, 166, 90, 0.8) !important;
+    color: white;
+}
+
+.question-container-box {
+    border: none;
+    box-shadow: 0 10px 6px -6px #777;
+}
+
+.is-correct-option {
+    color: lightgreen;
+    font-weight: 100;
+    font-size: 12px;
+    margin-left: -17px;
+    margin-right: 5px;
+}
+
+.question-container-box .breadcrumb {
+    list-style: none;
+    overflow: hidden;
+    display: inline;
+    background-color: none;
+}
+
+.question-container-box .breadcrumb li {
+    float: left;
+    /*color: white;
+    background: rgba(0, 166, 90, 0.8);*/
+}
+
+.question-container-box .breadcrumb>li+li:before {
+    content: "\3E"
+}
+
+
+/*.breadcrumb li a {
+    
+    text-decoration: none;
+    padding: 10px 0 10px 65px;
+    
+    position: relative;
+    display: block;
+    float: left;
+}
+
+
+
+.breadcrumb li a::before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    margin-left: 1px;
+    left: 100%;
+    z-index: 1;
+}*/
 /*# sourceMappingURL=utility.css.map */

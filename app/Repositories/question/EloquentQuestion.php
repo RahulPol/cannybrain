@@ -12,19 +12,21 @@ class EloquentQuestion  implements QuestionRepository
         $this->model = $model;
     }
 
-    public function getAllForCompany($company)
+    public function getAllForCompany($company,$answerType,$category)
     {
         return $this
             ->model
             ->with('user')
             ->with('company')
-            ->forCompany($company)
+            ->with('chapter')
+            ->with('category')
+            ->forCompany($company,$answerType,$category)
             ->get();
     }
 
     public function getById($id)
     {
-        return $this->model->findById($id);
+        return $this->model->findOrFail($id);
     }
 
     public function create(array $attributes)

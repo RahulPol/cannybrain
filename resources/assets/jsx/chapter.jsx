@@ -63,6 +63,11 @@ window.Chapter = React.createClass({
         })
     },//componentDidMount
 
+    componentWillReceiveProps: function (nextProps) {
+        console.log('nextProps in chapter..', nextProps);
+        $("#chapterSelect").select2('val', nextProps.defaultValue.toString());
+    },//componentWillReceiveProps
+
     initializeChapter: function (categoryId) {
         this.setState({ categoryId: categoryId });
     },//initializeChapterpod56

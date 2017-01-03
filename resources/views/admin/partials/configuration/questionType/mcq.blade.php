@@ -83,44 +83,7 @@
                                     <i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i>
                                 </div>
 
-                                <div class="col-md-12">
-                                    <div class="box box-custom box-default box-solid">
-                                        <div class="box-header with-border">
-                                            <h6 class="box-title"><b>Questions</b></h6>
-                                            <div class="box-tools pull-right">                    
-                                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                            </div><!-- /.box-tools -->
-                                        </div><!-- /.box-header -->
-                                        <div class="box-body">
-                                            <table id="questionDetails" class="table table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                            Name
-                                                        </th>
-                                                        <th>
-                                                            Organization
-                                                        </th>
-                                                        <th>
-                                                            Created By
-                                                        </th>
-
-                                                        <th>
-                                                            Last Modified On
-                                                        </th>
-
-                                                        <th>
-                                                            Action
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div><!-- /.box-body -->
-                                        <div id='questionDetailsOverlay' class="overlay" style="display:none">
-                                            <i class="fa fa-refresh fa-spin"></i>
-                                        </div>
-                                </div><!-- /.box -->
-                                </div>                                
+                                               
                             </div>
                         </div>
                     <meta name="_token" content="{!! csrf_token() !!}" />   
@@ -152,10 +115,28 @@
 </script>
 
 <script type="text/babel">    
+
+    $(function(){
+        $.urlParam = function(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (results==null){
+            return null;
+            }
+            else{
+            return results[1] || 0;
+            }
+        }
+
+        var action =  $.urlParam('action');
+        var questionId = $.urlParam('questionid') != null ? $.urlParam('questionid') : "-1";
+    
         ReactDOM.render(
-            <Board action="create" questionId="-1"></Board>,
+    <Board action={action} questionId={questionId}></Board>,
             document.getElementById('mcq-container')
         );
-    </script>
+
+    })
+        
+</script>
 
 @endsection

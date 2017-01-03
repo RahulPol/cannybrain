@@ -50,6 +50,11 @@ window.Category = React.createClass({
         getAllCategories();
     },//componentDidMount
 
+    componentWillReceiveProps: function (nextProps) {
+        $("#categorySelect").select2('val', nextProps.defaultValue.toString());
+        this.change();
+    },//componentWillReceiveProps
+
     render: function () {
         return (
             <div className='box category-box'>

@@ -1,15 +1,21 @@
 window.AnswerSelection = React.createClass({
     getInitialState: function () {
         return {
-            answerType: 'checkbox'
+            answerSelection: 'checkbox'
         }
     },//getInitialState
 
     _onOptionChange: function (option) {
         this.setState({
-            answerType: option
+            answerSelection: option
         });
     },
+
+    componentWillReceiveProps: function (nextProps) {
+        this.setState({
+            answerSelection: nextProps.selection
+        })
+    },//componentWillReceiveProps
 
     render: function () {
         return (
@@ -17,11 +23,11 @@ window.AnswerSelection = React.createClass({
                 <span className="title">Answer Selection</span>
                 <div className="radio">
                     <label htmlFor="radio">Radio buttons (only one answer option can be selected)</label>
-                    <input id="radio" onClick={this._onOptionChange.bind(this, 'radio')} type="radio" name="answerType" defaultChecked={this.state.answerType == 'radio'} style={{ marginLeft: 8 + 'px' }}></input>
+                    <input id="radio" onClick={this._onOptionChange.bind(this, 'radio')} type="radio" name="answerSelection" defaultChecked={this.state.answerSelection == 'radio'} style={{ marginLeft: 8 + 'px' }}></input>
                 </div>
                 <div className="radio">
                     <label htmlFor="checkbox">Checkboxes (multiple answer options can be selected)</label>
-                    <input id="checkbox" onClick={this._onOptionChange.bind(this, 'checkbox')} type="radio" name="answerType" defaultChecked={this.state.answerType == 'checkbox'} style={{ marginLeft: 16 + 'px' }} ></input>
+                    <input id="checkbox" onClick={this._onOptionChange.bind(this, 'checkbox')} type="radio" name="answerSelection" defaultChecked={this.state.answerSelection == 'checkbox'} style={{ marginLeft: 16 + 'px' }} ></input>
                 </div>
             </div>
         )

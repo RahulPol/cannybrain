@@ -156,130 +156,155 @@
 <!-- /.content -->
 <meta name="_token" content="{!! csrf_token() !!}" /> @endsection @section('customScript') {!! Html::script(elixir('js/dataTables.js')) !!}
 <script>
-        $(function(){            
-            var url = "/a/configuration/categories",
-                categoriesDetails = [];
+    $(function () {
+        var url = "/a/configuration/categories",
+            categoriesDetails = [];
 
-            //setup token for session so that token mismatch error is avoided;
-            //As this is done on function ready. This is a global setup for token.
-            $.ajaxSetup({                                    
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //setup token for session so that token mismatch error is avoided;
+        //As this is done on function ready. This is a global setup for token.
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        //Initialize Category page with category details using ajax call.
+        var getAllCategories = function () {
+
+            var getAllCategoriesUrl = url + "/getAllCategories",
+                type = "Get",
+                dataType = "json";
+            console.log('getAllCategories called with url...', getAllCategoriesUrl);
+            $.ajax({
+                type: type,
+                url: getAllCategoriesUrl,
+                dataType: dataType,
+                beforeSend: function () {
+                    $('#categoryDetailsOverlay').css('display', 'block');
+                },
+                success: function (resp) {
+                    console.log('resp...', resp);
+                    //append categoryDetails to data table
+                    $('#categoryDetails').DataTable().destroy();
+                    $('tbody').html('');
+
+                    //retrieve categories in categoriesDetails array
+                    if (resp.length > 0) {
+                        resp.forEach(function (category) {
+                            $('tbody').append("<tr id ='row-" + category.id + "'>" +
+                                "<td>" +
+                                category.name +
+                                "</td>" +
+                                "<td>" +
+                                category.company.name +
+                                "</td>" +
+                                "<td>" +
+                                category.user.name +
+                                "</td>" +
+                                "<td>" +
+                                moment(category.updated_at).format("MMM Do YY") +
+                                "</td>" +
+                                "<td>" +
+                                '<div class="btn-group" role="group" aria-label="...">' +
+                                '<image src="{{ asset("build/img/icons/edit-record.png") }}" style="width:2.8em;height:2em;cursor:pointer" aria-hidden="true" data-update-id="' +
+                                category.id + '"></i>' +
+                                '<image src="{{ asset("build/img/icons/delete-record.png") }}" style="padding-left:1em;width:2.8em;height:2em;cursor:pointer" aria-hidden="true" data-delete-id = "' +
+                                category.id + '"></i>' +
+                                '</div>' +
+                                "</td>" +
+                                "</tr>");
+                        });
+
+                        $('#categoryDetails').DataTable({
+                            "paging": true,
+                            "lengthChange": true,
+                            "searching": true,
+                            "ordering": true,
+                            "order": [
+                                [2, "desc"]
+                            ],
+                            "info": true,
+                            "autoWidth": false
+                        });
+
+                    } else {
+                        // TODO: Add No Data Available Watermark 
+                    }
+                    $('#categoryDetailsOverlay').css('display', 'none');
+                },
+                error: function (err) {
+                    console.log('resp...', err);
+                    $('#categoryDetailsOverlay').css('display', 'none');
+                }
+            });
+        }
+
+        //Create new category
+        $('#btnSubmitCategory').on('click', function (e) {
+            e.preventDefault(); //STOP default action
+
+            var createCategoryUrl = url,
+                formData = {
+                    categoryName: $('#categoryName').val()
+                },
+                type = "POST",
+                dataType = "json";
+
+            console.log('form data', formData);
+            $.ajax({
+                type: type,
+                url: createCategoryUrl,
+                data: formData,
+                dataType: dataType,
+                beforeSend: function () {
+                    $('#createCategoryOverlay').css('display', 'block');
+                },
+                success: function (resp) {
+                    console.log('response...', resp);
+                    $('#createCategoryOverlay').css('display', 'none');
+                    $('#createResponse').addClass('has-success');
+                    $('#createResponse span').html('Category created successfully.');
+                    $('#createResponse').slideDown().delay(1500).slideUp();
+                    $('#categoryName').val("");
+                    getAllCategories();
+
+                },
+                error: function (err) {
+                    $('#createCategoryOverlay').css('display', 'none');
+                    console.log('error for category post...', err);
+                    $('#createResponse').addClass('has-error');
+                    $('#createResponse span').html("Erro while creating category.");
+                    $('#createResponse').slideDown().delay(1500).slideUp();
+                    $('#categoryName').val("");
                 }
             });
 
-            //Initialize Category page with category details using ajax call.
-            var getAllCategories = function(){                
-                
-                var getAllCategoriesUrl = url + "/getAllCategories",
-                    type= "Get",
-                    dataType = "json";                
-                console.log('getAllCategories called with url...',getAllCategoriesUrl);
-                $.ajax({
-                    type:type,
-                    url:getAllCategoriesUrl,
-                    dataType:dataType,
-                    beforeSend:function(){
-                        $('#categoryDetailsOverlay').css('display','block');
-                    },
-                    success:function(resp){
-                        console.log('resp...',resp);
-                        //append categoryDetails to data table
-                        $('#categoryDetails').DataTable().destroy();
-                        $('tbody').html('');
-
-                        //retrieve categories in categoriesDetails array
-                        if(resp.length > 0){
-                            resp.forEach(function(category){
-                                $('tbody').append("<tr id ='row-"+ category.id +"'>" 
-                                    +"<td>"
-                                        + category.name
-                                    +"</td>"
-                                    +"<td>"
-                                        + category.company.name
-                                    +"</td>"
-                                    +"<td>"
-                                        + category.user.name
-                                    +"</td>"
-                                    +"<td>"
-                                        + moment(category.updated_at).format("MMM Do YY")
-                                    +"</td>" 
-                                    +"<td>"
-                                        +'<div class="btn-group" role="group" aria-label="...">'                                        
-                                        +'<image src="{{ asset("build/img/icons/edit-record.png") }}" style="width:2.8em;height:2em;cursor:pointer" aria-hidden="true" data-update-id="'+category.id+'"></i>'                                        
-                                        +'<image src="{{ asset("build/img/icons/delete-record.png") }}" style="padding-left:1em;width:2.8em;height:2em;cursor:pointer" aria-hidden="true" data-delete-id = "'+category.id+'"></i>'
-                                        +'</div>'
-                                    +"</td>" 
-                                +"</tr>");
-                            });
-                            
-                             $('#categoryDetails').DataTable({
-                                "paging": true,
-                                "lengthChange": true,
-                                "searching": true,
-                                "ordering": true,
-                                "order": [[ 2, "desc" ]],
-                                "info": true,
-                                "autoWidth": false                  
-                            });                               
-                            
-                        }else{
-                            // TODO: Add No Data Available Watermark 
-                        }
-                        $('#categoryDetailsOverlay').css('display','none');
-                    },
-                    error:function(err){
-                        console.log('resp...',err);
-                        $('#categoryDetailsOverlay').css('display','none');
-                    }
-                });
-            }
-
-            //Create new category
-            $('#btnSubmitCategory').on('click',function(e){   
-                e.preventDefault(); //STOP default action
-                
-                var createCategoryUrl = url ,
-                formData = {
-                    categoryName: $('#categoryName').val()          
-                },
-                type="POST",
-                dataType="json";                
-
-                console.log('form data',formData);
-                $.ajax({
-                    type:type,
-                    url:createCategoryUrl,
-                    data:formData,
-                    dataType:dataType,
-                    beforeSend:function(){
-                        $('#createCategoryOverlay').css('display','block');
-                    },
-                    success:function(resp){
-                        console.log('response...',resp);
-                        $('#createCategoryOverlay').css('display','none');
-                        $('#createResponse').addClass('has-success');
-                        $('#createResponse span').html('Category created successfully.');
-                        $('#createResponse').slideDown().delay(1500).slideUp();
-                        $('#categoryName').val("");
-                        getAllCategories();
-
-                    },
-                    error:function(err){
-                        $('#createCategoryOverlay').css('display','none');
-                        console.log('error for category post...',err);
-                        $('#createResponse').addClass('has-error');
-                        $('#createResponse span').html("Erro while creating category.");
-                        $('#createResponse').slideDown().delay(1500).slideUp();
-                        $('#categoryName').val("");
-                    }
-                });
-                
 
 
 
-            })
+        })
 
-            getAllCategories();
-        });
-    </script> @endsection
+        getAllCategories();
+    });
+</script> @endsection
+<table id="questionDetails" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Question
+            </th>
+            <th style="width:10%">
+                Chapter
+            </th>
+            <th style="width:10%">
+                Category
+            </th>
+            <th style="text-align:right;width:8%">
+                Marks
+            </th>
+            <th style="width:8%">
+                Action
+            </th>
+        </tr>
+    </thead>
+</table>

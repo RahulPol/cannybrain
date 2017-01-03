@@ -15,6 +15,10 @@ var Option = React.createClass({
 
     componentDidMount: function () {
         CKEDITOR.replace(this.props.optionId);
+        CKEDITOR.instances[this.props.optionId].setData(this.props.optionValue);
+        if (this.props.isCorrectAnswer) {
+            this.setState({ selected: true })
+        }
     },//componentDidMount
 
 
@@ -54,13 +58,6 @@ var OptionSet = React.createClass({
 
     getInitialState: function () {
         var options = [];
-        if (this.props.action == 'edit') {
-            //get data for options from database
-            options.push({
-                text: 'A',
-                body: '<b>Test this, option from db!</b>'
-            })
-        }
 
         return {
             optionText: ['A', 'B', 'C', 'D', 'E', 'F'],
@@ -68,11 +65,66 @@ var OptionSet = React.createClass({
         }
     },
 
+    componentWillReceiveProps: function (nextProps) {
+        if (this.props.action == 'edit') {
+            var options = [];
+            console.log('nextProps in optionSet...', nextProps)
+            if (nextProps.questionDetail.optionA != '') {
+                options.push({
+                    text: 'A',
+                    body: nextProps.questionDetail.optionA
+                })
+            }
+            if (nextProps.questionDetail.optionB != '') {
+                options.push({
+                    text: 'B',
+                    body: nextProps.questionDetail.optionB
+                })
+            }
+            if (nextProps.questionDetail.optionC != '') {
+                options.push({
+                    text: 'C',
+                    body: nextProps.questionDetail.optionC
+                })
+            }
+            if (nextProps.questionDetail.optionD != '') {
+                options.push({
+                    text: 'D',
+                    body: nextProps.questionDetail.optionD
+                })
+            }
+            if (nextProps.questionDetail.optionE != '') {
+                options.push({
+                    text: 'E',
+                    body: nextProps.questionDetail.optionE
+                })
+            }
+            if (nextProps.questionDetail.optionF != '') {
+                options.push({
+                    text: 'F',
+                    body: nextProps.questionDetail.optionF
+                })
+            }
+
+
+            console.log('updated optionSet...', options)
+            this.setState({
+                options: options
+            })
+
+        }
+    },//componentWillReceiveProps
+
     eachOption: function (option, i) {
         var optionId = "option" + option.text;
+        var isCorrectAnswer = false;
+        if (this.props.questionDetail.answer.indexOf(optionId) != -1) {
+            isCorrectAnswer = true;
+        }
+
         return (
             <Option key={i} index={i} ref={optionId} optionText={option.text} optionValue={option.body} optionId={optionId} questionId={this.props.questionId}
-                action={this.props.action} removeOption={this.remove}></Option>
+                action={this.props.action} removeOption={this.remove} isCorrectAnswer={isCorrectAnswer} ></Option>
         );
     },//eachOption
 
@@ -148,15 +200,19 @@ var Question = React.createClass({
 
     componentDidMount: function () {
         CKEDITOR.replace(this.props.questionId);
+    },//componentDidMount
+
+    componentWillReceiveProps: function (nextProps) {
         if (this.props.action == "create") {
             //
         }
         else if (this.props.action == "edit") {
-            //get question body data from ajax and update CKEDITOR
-            var data = "<b>Test this question from db!</b>";
-            CKEDITOR.instances[this.props.questionId].setData(data);
+            console.log('question details in question...', nextProps, nextProps.questionDetail, nextProps.questionDetail.title);
+            this.refs.questionHeader.value = nextProps.questionDetail.title;
+            CKEDITOR.instances[nextProps.questionId].setData(nextProps.questionDetail.body);
+            this.refs.questionFooter.value = nextProps.questionDetail.footer;
         }
-    },//componentDidMount
+    },//componentWillReceiveProps
 
     render: function () {
         return (
@@ -181,6 +237,48 @@ var Question = React.createClass({
 
 window.Board = React.createClass({
 
+    getInitialState: function () {
+        return {
+            questionDetail: {
+                marks: '1',
+                answer_selection: 'checkbox',
+                category_id: '',
+                chapter_id: ''
+            }
+        }
+    },//getInitialState
+
+
+    getQuestionById: function (questionId) {
+
+        var url = "/a/configuration/questionbank/getQuestionById?questionId=" + questionId,
+            type = "Get",
+            dataType = "json";
+
+        $.ajax({
+            type: type,
+            url: url,
+            dataType: dataType,
+            beforeSend: function () {
+                $('#questionViewerOverlay').css('display', 'block');
+            },
+            success: function (resp) {
+                console.log('question details...', resp);
+                this.setState({
+                    questionDetail: resp
+                })
+
+                // $('#questionViewerOverlay').css('display', 'none');
+                // console.log('question details...', resp);
+
+                // $('#questionViewerOverlay').css('display', 'none');
+            }.bind(this),
+            error: function (err) {
+                $('#questionViewerOverlay').css('display', 'none');
+                console.log('error....', err);
+            }
+        });
+    },//getQuestionById
 
     retrieveQuestionDetails: function () {
         var errorList = [];
@@ -256,7 +354,7 @@ window.Board = React.createClass({
             chapterId = '',
             questionDetails = {},
             optionDetails = [],
-            answerType = '',
+            answerSelection = '',
             totalMarks = 1;
 
 
@@ -264,13 +362,13 @@ window.Board = React.createClass({
         chapterId = this.refs.chapter.refs.chapterSelect.value;
         questionDetails = this.retrieveQuestionDetails();
         optionDetails = this.retrieveOptionDetails();
-        answerType = this.refs.answerSelection.state.answerType;
+        answerSelection = this.refs.answerSelection.state.answerSelection;
         totalMarks = this.refs.marks.refs.totalMarks.value;
         console.log('data in save...', this);
 
         if (!(questionDetails.errorFlag || optionDetails.errorFlag || chapterId == '' || categoryId == ''
             || optionDetails.data.length < 2 || optionDetails.correctAnswerCount == 0)) {
-            if (answerType == 'radio' && optionDetails.correctAnswerCount > 1) {
+            if (answerSelection == 'radio' && optionDetails.correctAnswerCount > 1) {
                 var content = '<p>Please mark only one option as answer for Radio buttons.</p>';
                 raiseInfo('Encountered error(s)!', content, 'red');
             } else {
@@ -292,7 +390,7 @@ window.Board = React.createClass({
                 questionSetup.answer_type = 'mcq';
                 questionSetup.category_id = categoryId;
                 questionSetup.chapter_id = chapterId;
-                questionSetup.answer_selection = answerType;
+                questionSetup.answer_selection = answerSelection;
                 questionSetup.marks = totalMarks;
 
                 //setup token for session so that token mismatch error is avoided;
@@ -384,6 +482,12 @@ window.Board = React.createClass({
     },//updateChapter
 
 
+    componentDidMount: function () {
+        if (this.props.action == 'edit') {
+            this.getQuestionById(this.props.questionId);
+        }
+    },//componentDidMount
+
     render: function () {
         return (
             <div className="mcq-board well well-bg col-md-12">
@@ -394,23 +498,24 @@ window.Board = React.createClass({
                     </span>
                 </div>
                 <div className='category col-md-6'>
-                    <Category ref="category" categoryChanged={this.categoryChanged}></Category>
+                    <Category ref="category" categoryChanged={this.categoryChanged} defaultValue={this.state.questionDetail.category_id}></Category>
                 </div>
                 <div className='chapter col-md-6'>
-                    <Chapter ref="chapter"></Chapter>
+                    <Chapter ref="chapter" defaultValue={this.state.questionDetail.chapter_id}></Chapter>
                 </div>
 
                 <div className="question col-md-12">
-                    <Question ref="question" action={this.props.action} questionId={this.props.questionId}></Question>
+                    <Question ref="question" action={this.props.action} questionId={this.props.questionId} questionDetail={this.state.questionDetail}>
+                    </Question>
                 </div>
                 <div className="option col-md-12">
-                    <OptionSet ref="optionSet" action={this.props.action} questionId={this.props.questionId}></OptionSet>
+                    <OptionSet ref="optionSet" action={this.props.action} questionId={this.props.questionId} questionDetail={this.state.questionDetail}></OptionSet>
                 </div>
                 <div className="col-md-12 answer-selection" >
-                    <AnswerSelection ref="answerSelection"></AnswerSelection>
+                    <AnswerSelection ref="answerSelection" selection={this.state.questionDetail.answer_selection} ></AnswerSelection>
                 </div>
                 <div className="col-md-12 answer" >
-                    <Marks ref="marks"></Marks>
+                    <Marks ref="marks" defaultValue={this.state.questionDetail.marks} ></Marks>
                 </div>
 
             </div>
@@ -418,5 +523,3 @@ window.Board = React.createClass({
     }//render
 
 });
-
-

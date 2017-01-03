@@ -1,9 +1,7 @@
 window.Marks = React.createClass({
 
-    _onOptionChange: function (option) {
-        this.setState({
-            answerType: option
-        });
+    componentWillReceiveProps: function (nextProps) {
+        this.refs.totalMarks.value = nextProps.defaultValue; //numeral(nextProps.defaultValue, "0[.]0");
     },
 
     render: function () {
@@ -11,7 +9,7 @@ window.Marks = React.createClass({
             <div className="marks-content">
                 <span className="title">Marks</span>
                 <br></br>
-                <input ref="totalMarks" style={{ marginLeft: 16 + 'px' }} type="number" defaultValue="1"></input>
+                <input ref="totalMarks" style={{ marginLeft: 16 + 'px' }} type="number" defaultValue={this.props.defaultValue} ></input>
             </div>
         )
     }

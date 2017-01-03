@@ -92,13 +92,35 @@ class QuestionBankController extends Controller {
             }                        
         }
 	}
+	 
+
+	public function getAllQuestions()
+	{	
+		if (Request::ajax()) {                       
+			$answerType =$_REQUEST['answerType'];
+			$category = $_REQUEST['category'];
+
+            return $this->question->getAllForCompany(Auth::user()->company->id,$answerType,$category);
+        }
+	}
+
+	public function getQuestionById()
+	{	
+		if (Request::ajax()) {                       
+			$questionId =$_REQUEST['questionId'];
+			
+            return $this->question->getById($questionId);
+        }
+	}
 
 	public function mcq()
 	{
 		$action = $_REQUEST['action'];
 		
-		if($action == 'create' || ($action=='edit' && array_key_exists ('questionid' ,$_REQUEST)) )
-			return view('admin.partials.configuration.questionType.mcq')->with('action','create');
+		if($action == 'create')
+			return view('admin.partials.configuration.questionType.mcq');
+		else if (($action=='edit' && array_key_exists ('questionid' ,$_REQUEST)))
+			return view('admin.partials.configuration.questionType.mcq');
 		else
 			return redirect('a/configuration/questionbank');
 	}

@@ -1,7 +1,6 @@
 @extends('admin.layout.master')
 
 @section('customStyle')
-{!! Html::style(elixir('css/dataTables.css')) !!}
     <style>
         .nav-tabs-custom>.nav-tabs>li.active{
             border-top-color:#00A65A;
@@ -21,11 +20,6 @@
             border-bottom:1px solid rgba(0,0,0,0.1)
         }
 
-        #btnAddQuestion{
-            background-color:rgba(0,166,90,0.8) !important;
-            color:white;
-        }
-
         .dropdown-menu li:hover{
             background-color:rgba(0,166,90,0.4) !important;
             color:white !important;
@@ -33,7 +27,7 @@
     </style>
 
     
-@endsection
+<@endsection></@endsection>
 
 @section('content')
     <section class="content-header">
@@ -61,17 +55,18 @@
                     <li class= "active" ><a href="/a/configuration/questionbank"><b>Question Bank</b></a></li>                                                
                     </ul>
                     <div class="tab-content">
-                        <div  class =  "tab-pane active" id="categories">                       
+                        <div  class =  "tab-pane active" id="questionbank">                       
                             <div class="row">
                                 
-                                <div class="col-md-12">
+                                <div class="col-md-12"> 
                                     <div class="box box-default box-solid box-custom">
                                         <div class="box-header with-border">
                                             <h6 class="box-title"><b>Question Details</b></h6>
                                             <div class="box-tools pull-right">                                                                    
-                                                <div class="btn-group open">
-                                                    <button type="button" class="btn btn-success"> <i class="fa fa-plus"></i> Add Question </button>
-                                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                            <span id="questionCount" data-toggle="tooltip" title="" class="badge bg-light-blue" data-original-title="Categoies Count">0</span>
+                                                <div class="btn-group">                                                    
+                                                    <button type="button" class="btn btn-default btn-sm"> <i class="fa fa-plus"></i> Add Question </button>
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                                         <span class="caret"></span>
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
@@ -79,12 +74,13 @@
                                                         <li><a href="/a/configuration/questionbank/mcq?action=create">MCQ</a></li>
                                                         <li><a href="/a/configuration/questionbank/tf">True/False</a></li>
                                                         <li><a href="/a/configuration/questionbank/essay">Essay</a></li>                                                        
-                                                    </ul>
+                                                    </ul>   
                                                 </div>                                              
                                             </div><!-- /.box-tools -->
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
-                                            
+                                            <div id="question-viewer-container" class="question-viewer-container col-md-12">                                                                                                                                                
+                                            </div>  
                                         </div><!-- /.box-body -->
                                         <div id='questionDetailsOverlay' class="overlay" style="display:none">
                                             <i class="fa fa-refresh fa-spin"></i>
@@ -104,15 +100,14 @@
 @endsection
 
 @section('customScript')
-{!! Html::script(elixir('js/dataTables.js')) !!}
+{!! Html::script(elixir('js/react.js')) !!}
+<script type="text/babel" src="{!! url('build/jsx/questionViewer.jsx') !!}"></script>
 
-<script>
-    $(function(){
-        $('#btnAddQuestion').on('click',function(){
-            var mcqUrl = "/a/configuration/questionbank/mcq?action=create";
-            window.location.href = mcqUrl;
-        });
-    });
+<script type="text/babel">    
+    ReactDOM.render(
+        <QuestionViewer></QuestionViewer>,
+        document.getElementById('question-viewer-container')
+    );
 </script>
 
 @endsection
