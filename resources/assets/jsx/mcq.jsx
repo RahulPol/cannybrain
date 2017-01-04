@@ -260,9 +260,12 @@ window.Board = React.createClass({
             url: url,
             dataType: dataType,
             beforeSend: function () {
-                $('#questionViewerOverlay').css('display', 'block');
+                $('body').append('<div class="curtain-class"></div>');
+                $('.mcq-board .overlay').css("display", "block");
             },
             success: function (resp) {
+                $('.curtain-class').remove();
+                $('.mcq-board .overlay').css("display", "none");
                 console.log('question details...', resp);
                 this.setState({
                     questionDetail: resp
@@ -274,7 +277,8 @@ window.Board = React.createClass({
                 // $('#questionViewerOverlay').css('display', 'none');
             }.bind(this),
             error: function (err) {
-                $('#questionViewerOverlay').css('display', 'none');
+                $('.curtain-class').remove();
+                $('.mcq-board .overlay').css("display", "none");
                 console.log('error....', err);
             }
         });
@@ -517,7 +521,7 @@ window.Board = React.createClass({
                 <div className="col-md-12 answer" >
                     <Marks ref="marks" defaultValue={this.state.questionDetail.marks} ></Marks>
                 </div>
-
+                <div className="overlay"><i className="fa fa-refresh fa-spin fa-3x"></i></div>
             </div>
         );
     }//render

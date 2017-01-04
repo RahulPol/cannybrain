@@ -39,13 +39,18 @@ window.Chapter = React.createClass({
                             })
                         }
 
-                        //Create category seclect 2
-                        $(_this.refs.chapterSelect).select2({
-                            placeholder: "Select Chapter"
-                        })
+                        if (_this.props.defaultValue == '') {
+                            //Create category seclect 2
+                            $(_this.refs.chapterSelect).select2({
+                                placeholder: "Select Chapter"
+                            })
 
-                        //use following for resetting select2
-                        $("#chapterSelect").val('').trigger('change');
+                            //use following for resetting select2
+                            $("#chapterSelect").val('').trigger('change');
+                        } else {
+                            $("#chapterSelect").val(_this.props.defaultValue).trigger('change');
+                        }
+
                         $('#chapterOverlay').css('display', 'none');
                     },
                     error: function (err) {
@@ -63,17 +68,22 @@ window.Chapter = React.createClass({
         })
     },//componentDidMount
 
-    componentWillReceiveProps: function (nextProps) {
-        console.log('nextProps in chapter..', nextProps);
-        $("#chapterSelect").select2('val', nextProps.defaultValue.toString());
-    },//componentWillReceiveProps
+    // componentWillUpdate: function (prevProps, nextProps) {
+    //     console.log('will update...', prevProps, nextProps);
+    // },//componentWillUpdate
+
+    // componentWillReceiveProps: function (nextProps) {
+    //     console.log('next props in chapter...', nextProps);
+    //     $("#chapterSelect").select2('val', nextProps.defaultValue.toString());
+    // },//componentWillReceiveProps
 
     initializeChapter: function (categoryId) {
         this.setState({ categoryId: categoryId });
-    },//initializeChapterpod56
+    },//initializeChapter
 
 
     render: function () {
+        console.log('render called');
         return (
             <div className='box chapter-box'>
                 <div className='box-header with-border'>
