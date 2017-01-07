@@ -168,7 +168,7 @@ class CategoriesController extends Controller
             }catch(\Exception $e){
                 return Response::json(array(
                         'success' => false,
-                        'errors' => "Error while creating category"
+                        'errors' => "Error while updating category"
                     ), 400);
             }            
         }

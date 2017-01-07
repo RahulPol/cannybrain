@@ -18,6 +18,9 @@ class QuestionBankController extends Controller {
 		'optionA' => 'required','optionB' => 'required','answer' => 'required','answer_type' => 'required',
 		'chapter_id' => 'required','category_id' => 'required'
 		);
+	private $updatevalidationRules = array('id'=>'required', 'title' => 'required',
+		'optionA' => 'required','optionB' => 'required','answer' => 'required','answer_type' => 'required',
+		'chapter_id' => 'required','category_id' => 'required');
 
 	public function __construct(QuestionRepository $question)
     {
@@ -118,9 +121,9 @@ class QuestionBankController extends Controller {
 		$action = $_REQUEST['action'];
 		
 		if($action == 'create')
-			return view('admin.partials.configuration.questionType.mcq');
+			return view('admin.partials.configuration.questionType.mcq')->with('action','Add');
 		else if (($action=='edit' && array_key_exists ('questionid' ,$_REQUEST)))
-			return view('admin.partials.configuration.questionType.mcq');
+			return view('admin.partials.configuration.questionType.mcq')->with('action','Edit');
 		else
 			return redirect('a/configuration/questionbank');
 	}
@@ -163,9 +166,60 @@ class QuestionBankController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update()
 	{
-		//
+		if (Request::ajax()) {      
+            $validator = Validator::make(Input::all(), $this->updatevalidationRules);
+
+            if ($validator->fails())
+            {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $validator->getMessageBag()->toArray()
+                ), 400); 
+            } 
+
+            $attributes = array();
+			$id = Request::input('id');
+			
+			$attributes['title'] = Request::input('title');
+            $attributes['body'] = Request::input('body');
+			$attributes['footer'] = Request::input('footer','');
+			$attributes['optionA'] = Request::input('optionA');
+			$attributes['optionB'] = Request::input('optionB');
+			$attributes['optionC'] = Request::input('optionC','');
+			$attributes['optionD'] = Request::input('optionD','');
+			$attributes['optionE'] = Request::input('optionE','');
+			$attributes['optionF'] = Request::input('optionF','');
+			$attributes['marks'] = Request::input('marks',1);
+			$attributes['answer'] = Request::input('answer');
+			$attributes['answer_description'] = Request::input('answer_description','');
+			$attributes['answer_type'] = Request::input('answer_type');
+			$attributes['negative_weightage'] = Request::input('negative_weightage',0);
+			$attributes['chapter_id'] = Request::input('chapter_id');
+			$attributes['category_id'] = Request::input('category_id');
+			$attributes['answer_selection'] = Request::input('answer_selection','');
+            $attributes['user_id'] = Auth::user()->id;
+            $attributes['company_id'] = Auth::user()->company->id;
+            $attributes['is_active'] = true;
+                        
+            try{
+                return $this->question->update($id, $attributes); 
+
+            }catch (\Illuminate\Database\QueryException $e){ 
+				$errorCode = $e->errorInfo[1];               
+
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Database error, please contact admin."
+                    ), 400);            
+            }catch(\Exception $e){
+                return Response::json(array(
+                        'success' => false,
+                        'errors' => "Error while updating question"
+                    ), 400);
+            }            
+        }
 	}
 
 	/**
@@ -174,9 +228,13 @@ class QuestionBankController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy()
 	{
-		//
+		if (Request::ajax()) {                                         
+            $id  = Request::input('id');            
+            
+            return $this->question->delete($id);            
+        }
 	}
 
 }

@@ -115,6 +115,64 @@ var QuestionContainer = React.createClass({
 
     },//onEditQuestionClicked
 
+    onDeleteQuestionClicked: function (questionId) {
+        console.log('question id....', questionId);
+        //setup token for session so that token mismatch error is avoided;
+        //As this is done on function ready. This is a global setup for token.
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+
+        $.confirm({
+            title: 'Delete Question!',
+            content: 'Are you sure?',
+            animation: 'scaleY',
+            icon: 'fa fa-warning',
+            type: 'red',
+            theme: 'light',
+            typeAnimated: true,
+            backgroundDismiss: true,
+            closeIcon: true,
+            closeIconClass: 'fa fa-close',
+            buttons: {
+                confirm: {
+                    text: 'Okay',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        var deleteQuestionUrl = window.location.origin + "/a/configuration/questionbank",
+                            formData = {
+                                id: questionId
+                            },
+                            type = "DELETE",
+                            dataType = "json";
+
+                        $.ajax({
+                            type: type,
+                            url: deleteQuestionUrl,
+                            data: formData,
+                            dataType: dataType,
+                            beforeSend: function () {
+                                $('#questionViewerOverlay').css('display', 'block');
+                            },
+                            success: function (resp) {
+                                $('#questionViewerOverlay').css('display', 'none');
+                                var questionBank = window.location.origin + "/a/configuration/questionbank";
+                                window.location.href = questionBank;
+                            },
+                            error: function (err) {
+                                $('#questionViewerOverlay').css('display', 'none');
+                                console.log("Delete error...", err);
+                            }
+                        });
+                    }
+                },
+
+            }
+        });
+    },//onDeleteQuestionClicked
+
     render: function () {
         return (
             <div className="col-md-12">
@@ -135,7 +193,9 @@ var QuestionContainer = React.createClass({
                             <button className="btn btn-box-tool" title="edit" onClick={() => this.onEditQuestionClicked(this.props.question.id, this.props.question.answer_type)} >
                                 <i className="fa fa-pencil"></i>
                             </button>
-                            <button className="btn btn-box-tool" style={{ color: 'red' }} title='delete'><i className="fa fa-trash"></i></button>
+                            <button className="btn btn-box-tool" style={{ color: 'red' }} title='delete' onClick={() => this.onDeleteQuestionClicked(this.props.question.id)}>
+                                <i className="fa fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                     <div className="box-body">

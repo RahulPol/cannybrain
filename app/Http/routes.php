@@ -34,17 +34,20 @@ Route::group(['middleware'=>['auth','auth.admin']],function(){
 	#Section Configuration/Chapters
 	Route::get('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@index']);
 	Route::get('a/configuration/chapters/getAllChapters',[ 'uses'=>'Admin\Configuration\ChaptersController@getAllChapters']);
+	Route::get('a/configuration/chapters/getChaptersDropdownForCategory/{category}',[ 'uses'=>'Admin\Configuration\ChaptersController@getChaptersDropdownForCategory']);
 	Route::post('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@create']);
 	Route::put('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@update']);
 	Route::delete('a/configuration/chapters',[ 'uses'=>'Admin\Configuration\ChaptersController@destroy']);
-	Route::get('a/configuration/chapters/getChaptersDropdownForCategory/{category}',[ 'uses'=>'Admin\Configuration\ChaptersController@getChaptersDropdownForCategory']);
+	
 
 	#Section Configuration/QuestionBank
 	Route::get('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@index']);
-	Route::post('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@create']);
 	Route::get('a/configuration/questionbank/getAllQuestions',[ 'uses'=>'Admin\Configuration\QuestionBankController@getAllQuestions']);
 	Route::get('a/configuration/questionbank/getQuestionById',[ 'uses'=>'Admin\Configuration\QuestionBankController@getQuestionById']);
+	Route::post('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@create']);
+	Route::put('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@update']);	
 	Route::get('a/configuration/questionbank/mcq',[ 'uses'=>'Admin\Configuration\QuestionBankController@mcq']);
+	Route::delete('a/configuration/questionbank',[ 'uses'=>'Admin\Configuration\QuestionBankController@destroy']);		
 
 	
 });

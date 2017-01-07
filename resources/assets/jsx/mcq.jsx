@@ -379,9 +379,13 @@ window.Board = React.createClass({
 
                 //Save question to db.
                 var questionSetup = {},
-                    type = 'POST',
+                    type = this.props.action == 'create' ? 'POST' : 'PUT',
                     dataType = 'json',
                     createQuestionUrl = '/a/configuration/questionbank';
+
+                if (this.props.action == 'edit') {
+                    questionSetup.id = this.props.questionId;
+                }
 
                 questionSetup.title = questionDetails.title;
                 questionSetup.body = questionDetails.body;
@@ -420,7 +424,7 @@ window.Board = React.createClass({
                                 text: 'Add More',
                                 btnClass: 'btn-dark fa fa-plus',
                                 action: function () {
-                                    var mcqUrl = window.location.href;
+                                    var mcqUrl = window.location.origin + "/a/configuration/mcq?action=create";
                                     window.location.href = mcqUrl;
                                 }
                             },

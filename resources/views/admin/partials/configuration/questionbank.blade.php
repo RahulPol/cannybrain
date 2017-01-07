@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+                    <meta name="_token" content="{!! csrf_token() !!}" /> 
                     </div>
                     <!-- /.tab-content -->
                 </div>

@@ -50,7 +50,7 @@
 @section('content')
     <section class="content-header">
         <h1>
-            Add Question
+            {{$action}} Question
             <small>{{ $page_title or null }}</small>
         </h1>
         <!-- You can dynamically generate breadcrumbs here -->
@@ -58,7 +58,7 @@
             <li><a href="/a/dashboard"><i class="fa fa-home"></i>Home</a></li>
             <li><a href="/a/configuration/categories"><i class="fa fa-cogs"></i>Configuration</a></li>
             <li><a href="/a/configuration/questionbank"><i class="fa fa-book"></i>Question Bank</a></li>
-            <li class="active"><i class="fa fa-plus"></i>Add Question</li>                                
+            <li class="active">{{$action}} Question</li>                                
         </ol>            
     </section>
 
